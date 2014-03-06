@@ -1,13 +1,14 @@
 (function () {
 
+var MyTypeError = TypeError; // alias to help minify
+
 /* Helper functions */
-function notComplexNumber(num) {
-  var args = arguments.toArray();
-  if (args[1]) {
-    return !(args.shift().constructor === ComplexNumber) &&
-             notComplexNumber(args));
-  }
-  return (num.constructor !== ComplexNumber);
+function isNumber(obj) {
+  return (obj.constructor === Number);
+}
+
+function toComplexNumber(num) {
+  return new ComplexNumber(num, 0);
 }
 
 function exportFunctions(array) {
@@ -17,19 +18,22 @@ function exportFunctions(array) {
   ComplexNumber.prototype['minus'] = ComplexNumber.prototype.minus();
   ComplexNumber.prototype['times'] = ComplexNumber.prototype.times();
   ComplexNumber.prototype['divide'] = ComplexNumber.prototype.divide();
+  ComplexNumber.prototype['reciprocal'] = ComplexNumber.prototype.reciprocal();
+  ComplexNumber.prototype['argument'] = ComplexNumber.prototype.argument();
 }
 
+/* constructor  */
 ComplexNumber(real, imaginary) {
-  var this.re = real;
-  var this.im = imaginary;
+  this.re = real;
+  this.im = imaginary;
 }
 
 ComplexNumber.prototype = {
   toString: function (num) {
-    if (num.constructor !== ComplexNumber)
-      throw new TypeError();
     var real = (num) ? num.re : this.re;
     var imag = (num) ? num.im : this.im;
+    var positive; // combine variable declarations to help minify some
+    var pm;
     
     if (isNaN(real) || isNaN(imag))
       return 'NaN';
@@ -40,8 +44,8 @@ ComplexNumber.prototype = {
     if (imag == 0) return real.toString();
     if (real == 0) return imag + 'i';
     
-    var positive = (imag > 0);
-    var pm = (positive) ? ' + ' : ' - ';
+    positive = (imag > 0);
+    pm = (positive) ? ' + ' : ' - ';
     
     if (!positive) imag = -imag;
     
@@ -50,33 +54,84 @@ ComplexNumber.prototype = {
     return real + pm + imag + 'i';
   }
   
+  real: function (foo) {
+    return this.real;
+  }
+  
+  imag: function () {
+    return this.imag;
+  }
+  
   plus: function (numOne, numTwo) {
-    if (numTwo) {
-      if (notComplexNumber(numOne, numTwo))
-        throw new TypeError();
-      return new ComplexNumber(numOne.re + numTwo.re,
-                               numOne.im + numTwo.im);
+    if (this) numTwo = this;
+    if (isNumber(numOne)) {
+      return new ComplexNumber(numTwo.re + numOne, numTwo.im);
     }
-    if (notComplexnumber(this, numOne))
-      throw new TypeError();
-    return new ComplexNumber(this.re + numOne.re,
-                             this.im + numOne.im);
+    if (isNumber(numTwo)) {
+      return new ComplexNumber(numTwo + numOne.re, numOne.im);
+    }
+    return new ComplexNumber(numTwo.re + numOne.re,
+                             numTwo.im + numOne.im);
   }
   
   minus: function (numOne, numTwo) {
-    if (numTwo) {
-      if (notComplexNumber(numOne, numTwo))
-        throw new TypeError();
-      return new ComplexNumber(numOne.re - numTwo.re,
-                               numOne.im - numTwo.im);
+    if (this) {
+      numTwo = numOne;
+      numOne = this;
     }
-    if (notComplexNumber(this, numOne))
-      throw new TypeError();
-    return new ComplexNumber(this.re - numOne.re,
-                             this.im - numOne.im);
+    if (isNumber(numOne)) {
+      return new ComplexNumber(numTwo.re - numOne, numTwo.im);
+    }
+    if (isNumber(numTwo)) {
+      return new ComplexNumber(numTwo - numOne.re, -numOne.im);
+    }
+    return new ComplexNumber(numTwo.re - numOne.re,
+                             numTwo.im - numOne.im);
   }
+  
   times: function (numOne, numTwo) {
-    
+    if (this) numTwo = this;
+    if (isNumber(numOne)) {
+      return new ComplexNumber(numOne * numTwo.re,
+                               numOne * numTwo.im);
+    }
+    if (isNumber(numTwo)) {
+      return new ComplexNumber(numOne.re * numTwo,
+                               numOne.im * numTwo);
+    }
+    return new ComplexNumber(numOne.re * numTwo.re,
+                             numOne.im * numTwo.im);
+  }
+  
+  divide: function (numOne, numTwo) {
+    if (this) {
+      numTwo = numOne;
+      numOne = this;
+    }
+    if (isNumber(numOne)) numOne = toComplexNumber(numOne);
+    if (isNumber(numTwo)) {
+      return new ComplexNumber(numOne.re / numTwo,
+                               numTwo.im / numTwo);
+    }
+    return numOne.times(numTwo.reciprocal());
+  }
+  
+  reciprocal: function (num) {
+    if (this) num = this;
+    var scale = num.re * num.re + num.im * num.im;
+    return new ComplexNumber(num.re / scale, num.im / scale);
+  }
+  
+  argument: function (num) {
+    if (this) num = this;
+    if (isNumber(num)) num = toComplexNumber(num);
+    return Math.atan2(num.im, num.re);
+  }
+  
+  abs: function (num) {
+    if (this) num = this;
+    if (isNumber(num)) return Math.abs(num);
+    return Math.sqrt(num.re * num.re + num.im * num.im)
   }
 }
 
