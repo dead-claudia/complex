@@ -7,12 +7,41 @@ function isNumber(obj) {
   return (obj.constructor === Number);
 }
 
+function isInteger(num) {
+  return (num % 1 == num);
+}
+
 function toComplexNumber(num) {
   return newComplexNumber(num, 0);
 }
 
-function abs(num) {
-  return Math.abs(num);
+var abs = Math.abs;
+var sin = Math.sin;
+var cos = Math.cos;
+var exp = Math.exp;
+var pow = Math.pow;
+
+if (Math.sinh) {
+  var sinh = Math.sinh;
+  var cosh = Math.cosh;
+  var tanh = Math.tanh;
+} else {
+  var sinh = function (num) {
+    var e = Math.E;
+    var p = pow(e, num);
+    return (p - 1 / p) / 2;
+  };
+  var cosh = function (num) {
+    var e = Math.E;
+    var p = pow(e, num);
+    return (p + 1 / p) / 2;
+  };
+  var tanh = function (num) {
+    var e = Math.E;
+    var p = pow(e, num);
+    var r = 1 / p;
+    return (p + r) / (p - r);
+  }
 }
 
 function newComplexNumber(real, imag) {
@@ -20,16 +49,18 @@ function newComplexNumber(real, imag) {
 }
 
 function exportFunctions() {
+  ComplexNumber.fn['toString'] = ComplexNumber.fn.toString;
+  ComplexNumber.fn['plus'] = ComplexNumber.fn.plus;
+  ComplexNumber.fn['minus'] = ComplexNumber.fn.minus;
+  ComplexNumber.fn['times'] = ComplexNumber.fn.times;
+  ComplexNumber.fn['divide'] = ComplexNumber.fn.divide;
+  ComplexNumber.fn['recip'] = ComplexNumber.fn.recip;
+  ComplexNumber.fn['arg'] = ComplexNumber.fn.arg;
+  ComplexNumber.fn['real'] = ComplexNumber.fn.real;
+  ComplexNumber.fn['imag'] = ComplexNumber.fn.imag;
+  
+  ComplexNumber.prototype = ComplexNumber.fn;
   window['ComplexNumber'] = ComplexNumber;
-  ComplexNumber.prototype['toString'] = ComplexNumber.prototype.toString;
-  ComplexNumber.prototype['plus'] = ComplexNumber.prototype.plus;
-  ComplexNumber.prototype['minus'] = ComplexNumber.prototype.minus;
-  ComplexNumber.prototype['times'] = ComplexNumber.prototype.times;
-  ComplexNumber.prototype['divide'] = ComplexNumber.prototype.divide;
-  ComplexNumber.prototype['recip'] = ComplexNumber.prototype.recip;
-  ComplexNumber.prototype['arg'] = ComplexNumber.prototype.arg;
-  ComplexNumber.prototype['real'] = ComplexNumber.prototype.real;
-  ComplexNumber.prototype['imag'] = ComplexNumber.prototype.imag;
 }
 
 /* constructor  */
@@ -38,7 +69,7 @@ ComplexNumber(real, imaginary) {
   this.im = imaginary;
 }
 
-ComplexNumber.prototype = {
+ComplexNumber.fn = {
   toString: function (num) {
     var real = (num) ? num.re : this.re;
     var imag = (num) ? num.im : this.im;
@@ -138,17 +169,6 @@ ComplexNumber.prototype = {
     return Math.atan2(num.im, num.re);
   }
   
-  abs: function (num) {
-    if (this) num = this;
-    if (isNumber(num)) return abs(num);
-    var x = abs(num.re);
-    var y = abs(num.im);
-    var t = Math.min(x, y);
-    x = Math.max(x, y);
-    t /= x;
-    return x * Math.sqrt(1 + t * t);
-  }
-  
   conj: function (num) {
     if (this) num = this;
     return newComplexNumber(num.re, -num.im);
@@ -158,8 +178,55 @@ ComplexNumber.prototype = {
     if (this) num = this;
     return newComplexNumber(-num.re, -num.im);
   }
+  
+  exp: function (num) {
+    if (this) num = this;
+    var real = num.re;
+    var imag = num.im;
+    if (isInteger(real)) return toComplexNumber(exp(real));
+    return newComplexNumber(exp(real) * cos(imag),
+                            exp(real) * sin(imag));
+  }
+  
+  sin: function (num) {
+    if (this) num = this;
+    var real = num.re;
+    var imag = num.im;
+    if (isInteger(real)) return toComplexNumber(sin(real));
+    return newComplexNumber(sin(real) * Math.cosh(imag),
+                            cos(real) * Math.sinh(imag));
+  }
+  
+  cos: function (num) {
+    if (this) num = this;
+    var real = num.re;
+    var imag = num.im;
+    return newComplexNumber(Math.cos(real) * Math.cosh(imag),
+                            Math.sin(real) * Math.sinh(imag));
+  }
+  
+  
 }
 
+/* conditional function assignments */
+if (Math.hypot) {
+  ComplexNumber.fn.abs = function (num) {
+    if (this) num = this;
+    if (isNumber(num)) return abs(num);
+    return Math.hypot(num.im, num.re);
+  }
+} else {
+  ComplexNumber.fn.abs = function (num) {
+    if (this) num = this;
+    if (isNumber(num)) return abs(num);
+    var x = abs(num.re);
+    var y = abs(num.im);
+    var t = Math.min(x, y);
+    x = Math.max(x, y);
+    t /= x;
+    return x * Math.sqrt(1 + t * t);
+  }
+}
 
 exportFunctions();
 
