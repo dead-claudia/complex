@@ -8,7 +8,7 @@ function isNumber(obj) {
 }
 
 function toComplexNumber(num) {
-  return new ComplexNumber(num, 0);
+  return newComplexNumber(num, 0);
 }
 
 function abs(num) {
@@ -150,8 +150,10 @@ ComplexNumber.prototype = {
   }
   
   conj: function (num) {
-    return newComplexNumber(num.re, num.im);
+    return newComplexNumber(num.re, -num.im);
   }
+  
+  
 }
 
 
