@@ -19,7 +19,7 @@ function newComplexNumber(real, imag) {
   return new ComplexNumber(real, imag);
 }
 
-function exportFunctions(array) {
+function exportFunctions() {
   window['ComplexNumber'] = ComplexNumber;
   ComplexNumber.prototype['toString'] = ComplexNumber.prototype.toString;
   ComplexNumber.prototype['plus'] = ComplexNumber.prototype.plus;
@@ -64,12 +64,12 @@ ComplexNumber.prototype = {
     return real + pm + imag + 'i';
   }
   
-  real: function (foo) {
-    return this.re;
+  real: function (num) {
+    return (num) ? num.re : this.re;
   }
   
-  imag: function () {
-    return this.im;
+  imag: function (num) {
+    return (num) ? num.im : this.im;
   }
   
   plus: function (numOne, numTwo) {
@@ -150,13 +150,17 @@ ComplexNumber.prototype = {
   }
   
   conj: function (num) {
+    if (this) num = this;
     return newComplexNumber(num.re, -num.im);
   }
   
-  
+  negate: function (num) {
+    if (this) num = this;
+    return newComplexNumber(-num.re, -num.im);
+  }
 }
 
 
-this['ComplexNumber'] = ComplexNumber; // implicit global
+exportFunctions();
 
 })();
