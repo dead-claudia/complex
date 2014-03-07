@@ -1,3 +1,10 @@
+/*@preserve
+ * Complex.js
+ * Copyright Isiah Meadows
+ * Licensed under GNU GPL v3 or later
+ */
+ 
+
 (function () {
 
 var MyTypeError = TypeError; // alias to help minify
