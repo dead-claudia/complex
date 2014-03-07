@@ -1,4 +1,4 @@
-/*@preserve
+/* @preserve
  * Complex.js
  * Copyright Isiah Meadows
  * Licensed under GNU GPL v3 or later
