@@ -3,21 +3,34 @@
 var MyTypeError = TypeError; // alias to help minify
 
 /* Helper functions */
-function isNumber(obj) {
+var newComplexNumber = function (real, imag) {
+  return new ComplexNumber(real, imag);
+};
+
+var isNumber = function (obj) {
   return (obj.constructor === Number);
-}
+};
 
-function isInteger(num) {
+var isInteger = function (num) {
   return (num % 1 == num);
-}
+};
 
-function toComplexNumber(num) {
+var realToComplex = function (num) {
   return newComplexNumber(num, 0);
-}
+};
+
+var imagToComplex = function (num) {
+  return newComplexNumber(0, num);
+};
+
+var isZero = function (num) {
+  return (num.im == 0);
+};
 
 var abs = Math.abs;
 var sin = Math.sin;
 var cos = Math.cos;
+var tan = Math.tan;
 var exp = Math.exp;
 var pow = Math.pow;
 
@@ -27,25 +40,18 @@ if (Math.sinh) {
   var tanh = Math.tanh;
 } else {
   var sinh = function (num) {
-    var e = Math.E;
-    var p = pow(e, num);
+    var p = exp(num);
     return (p - 1 / p) / 2;
   };
   var cosh = function (num) {
-    var e = Math.E;
-    var p = pow(e, num);
+    var p = exp(num);
     return (p + 1 / p) / 2;
   };
   var tanh = function (num) {
-    var e = Math.E;
-    var p = pow(e, num);
+    var p = exp(num);
     var r = 1 / p;
     return (p + r) / (p - r);
-  }
-}
-
-function newComplexNumber(real, imag) {
-  return new ComplexNumber(real, imag);
+  };
 }
 
 function exportFunctions() {
@@ -149,10 +155,11 @@ ComplexNumber.fn = {
       numTwo = numOne;
       numOne = this;
     }
-    if (isNumber(numOne)) numOne = toComplexNumber(numOne);
-    if (isNumber(numTwo))
+    if (isNumber(numOne)) numOne = realToComplex(numOne);
+    if (isNumber(numTwo)) {
       return newComplexNumber(numOne.re / numTwo,
                               numTwo.im / numTwo);
+    }
     
     return numOne.times(numTwo.reciprocal());
   }
@@ -165,7 +172,16 @@ ComplexNumber.fn = {
   
   arg: function (num) {
     if (this) num = this;
-    if (isNumber(num)) num = toComplexNumber(num);
+    var real = num.re;
+    var imag = num.im;
+    if (isNaN(real) || isNaN(imag)) return NaN;
+    if 
+    if (real == +0) {
+      if (imag === +0) return +0;
+      if (imag === )
+      // TODO: finish using this as a guide:
+      // https://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/carg.3.html
+    }
     return Math.atan2(num.im, num.re);
   }
   
@@ -183,7 +199,7 @@ ComplexNumber.fn = {
     if (this) num = this;
     var real = num.re;
     var imag = num.im;
-    if (isInteger(real)) return toComplexNumber(exp(real));
+    if (imag)) return realToComplex(exp(real));
     return newComplexNumber(exp(real) * cos(imag),
                             exp(real) * sin(imag));
   }
@@ -192,27 +208,37 @@ ComplexNumber.fn = {
     if (this) num = this;
     var real = num.re;
     var imag = num.im;
-    if (isInteger(real)) return toComplexNumber(sin(real));
-    return newComplexNumber(sin(real) * Math.cosh(imag),
-                            cos(real) * Math.sinh(imag));
+    if (imag) return realToComplex(sin(real));
+    return newComplexNumber(sin(real) * cosh(imag),
+                            cos(real) * sinh(imag));
   }
   
   cos: function (num) {
     if (this) num = this;
     var real = num.re;
     var imag = num.im;
-    return newComplexNumber(Math.cos(real) * Math.cosh(imag),
-                            Math.sin(real) * Math.sinh(imag));
+    if (imag) return realToComplex(cos(real));
+    if (real) return realToComplex(cosh(imag));
+    return newComplexNumber(cos(real) * cosh(imag),
+                            sin(real) * sinh(imag));
   }
   
-  
+  tan: function (num) {
+    if (this) num = this;
+    var real = num.re;
+    if (real) return realToComplex(tan(real));
+    if (imag) return newComplexNumber(tanh(imag));
+    return sin(num).divide(cos(num));
+  }
 }
 
 /* conditional function assignments */
 if (Math.hypot) {
   ComplexNumber.fn.abs = function (num) {
     if (this) num = this;
-    if (isNumber(num)) return abs(num);
+    var real = num.re;
+    var imag = num.im;
+    if (imag) return abs(real);
     return Math.hypot(num.im, num.re);
   }
 } else {
