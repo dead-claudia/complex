@@ -11,10 +11,6 @@ var isNumber = function (obj) {
   return (obj.constructor === Number);
 };
 
-var isInteger = function (num) {
-  return (num % 1 == num);
-};
-
 var realToComplex = function (num) {
   return newComplexNumber(num, 0);
 };
@@ -34,25 +30,39 @@ var tan = Math.tan;
 var exp = Math.exp;
 var pow = Math.pow;
 
-if (Math.sinh) {
-  var sinh = Math.sinh;
-  var cosh = Math.cosh;
-  var tanh = Math.tanh;
-} else {
-  var sinh = function (num) {
+/* Extend Math object if needed...easier for end user as well */
+if (!Math['sinh']) {
+  Math['sinh'] = function (num) {
     var p = exp(num);
     return (p - 1 / p) / 2;
   };
-  var cosh = function (num) {
+}
+if (!Math['cosh']) {
+  Math['cosh'] = function (num) {
     var p = exp(num);
     return (p + 1 / p) / 2;
   };
-  var tanh = function (num) {
+}
+if (!Math['tanh']) {
+  Math['tanh'] = function (num) {
     var p = exp(num);
     var r = 1 / p;
     return (p + r) / (p - r);
   };
 }
+if (!Math['hypot']) {
+  Math['hypot'] = function (y, x) {
+    if (x < y) x = y + (y = x, 0) // flip numbers
+    y /= x;
+    return x * Math.sqrt(1 + y * y);
+  }
+}
+
+var sinh  = Math['sinh'];
+var cosh  = Math['cosh'];
+var tanh  = Math['tanh'];
+var hypot = Math['hypot'];
+var pi    = Math['PI'];
 
 function exportFunctions() {
   ComplexNumber.fn['toString'] = ComplexNumber.fn.toString;
@@ -64,6 +74,13 @@ function exportFunctions() {
   ComplexNumber.fn['arg'] = ComplexNumber.fn.arg;
   ComplexNumber.fn['real'] = ComplexNumber.fn.real;
   ComplexNumber.fn['imag'] = ComplexNumber.fn.imag;
+  ComplexNumber.fn['conj'] = ComplexNumber.fn.conj;
+  ComplexNumber.fn['negate'] = ComplexNumber.fn.negate;
+  ComplexNumber.fn['exp'] = ComplexNumber.fn.exp;
+  ComplexNumber.fn['sin'] = ComplexNumber.fn.sin;
+  ComplexNumber.fn['cos'] = ComplexNumber.fn.cos;
+  ComplexNumber.fn['tan'] = ComplexNumber.fn.tan;
+  ComplexNumber.fn['abs'] = ComplexNumber.fn.abs;
   
   ComplexNumber.prototype = ComplexNumber.fn;
   window['ComplexNumber'] = ComplexNumber;
@@ -88,8 +105,8 @@ ComplexNumber.fn = {
     if (!isFinite(real) || !isFinite(imag))
       return 'Infinity';
     
-    if (imag == 0) return real + '';
-    if (real == 0) return imag + 'i';
+    if (imag) return real + '';
+    if (real) return imag + 'i';
     
     positive = (imag > 0);
     pm = (positive) ? ' + ' : ' - ';
@@ -178,11 +195,19 @@ ComplexNumber.fn = {
     if 
     if (real == +0) {
       if (imag === +0) return +0;
-      if (imag === )
+      return +(pi / 2)
       // TODO: finish using this as a guide:
       // https://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/carg.3.html
     }
     return Math.atan2(num.im, num.re);
+  }
+  
+  abs: function (num) {
+    if (this) num = this;
+    var real = num.re;
+    var imag = num.im;
+    if (imag) return abs(real);
+    return hypot(num.im, num.re);
   }
   
   conj: function (num) {
@@ -229,28 +254,6 @@ ComplexNumber.fn = {
     if (real) return realToComplex(tan(real));
     if (imag) return newComplexNumber(tanh(imag));
     return sin(num).divide(cos(num));
-  }
-}
-
-/* conditional function assignments */
-if (Math.hypot) {
-  ComplexNumber.fn.abs = function (num) {
-    if (this) num = this;
-    var real = num.re;
-    var imag = num.im;
-    if (imag) return abs(real);
-    return Math.hypot(num.im, num.re);
-  }
-} else {
-  ComplexNumber.fn.abs = function (num) {
-    if (this) num = this;
-    if (isNumber(num)) return abs(num);
-    var x = abs(num.re);
-    var y = abs(num.im);
-    var t = Math.min(x, y);
-    x = Math.max(x, y);
-    t /= x;
-    return x * Math.sqrt(1 + t * t);
   }
 }
 
