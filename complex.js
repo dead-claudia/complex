@@ -26,9 +26,9 @@ var imagToComplex = function (num) {
   return newComplexNumber(0, num);
 };
 
-var isZero = function (num) {
-  return (num.im == 0);
-};
+var undef = function (num) {
+  return (typeof num === 'undefined')
+}
 
 var abs = Math.abs;
 var sin = Math.sin;
@@ -36,6 +36,7 @@ var cos = Math.cos;
 var tan = Math.tan;
 var exp = Math.exp;
 var pow = Math.pow;
+var sqrt = Math.sqrt;
 
 /* Extend Math object if needed...easier for end user as well */
 if (!Math['sinh']) {
@@ -58,11 +59,46 @@ if (!Math['tanh']) {
   };
 }
 if (!Math['hypot']) {
-  Math['hypot'] = function (y, x) {
-    if (x < y) x = y + (y = x, 0) // flip numbers
-    y /= x;
-    return x * Math.sqrt(1 + y * y);
+  Math['hypot'] = function (x, y, z) {
+    var zero = true;
+    var nan = false;
+    var args = arguments.toArray();
+    for (var i in args) {
+      if (isNaN(i)) {
+        nan = true;
+        continue;
+      }
+      if (!isFinite(i)) return +Infinity;
+      if (i) zero = false;
+    }
+    if (nan) return NaN;
+    if (zero) return +0;
+    var length = args.length;
+    if (!length) return +0;
+    if (length == 1) return abs(x);
+    if (length == 2) return x * sqrt(1 + (y /= x) * y);
+    if (length == 3) {
+      var prod = x * y;
+      // 1 / y / y == 1 / (y * y)
+      return abs(prod) * sqrt(1 / x / x + 1 / y / y + 1 / prod / prod)
+    }
+    var lastTerm = args.shift();
+    var product = 1;
+    
+    // TODO: needs to be found...check the following link for details:
+    // http://stackoverflow.com/questions/22290380/programmatically-getting-list-of-combinations
+    var combinations = [];
+    var combLength = combinations.length - 1;
+    var sum = 0;
+    length -= 2;
+    for (var i in args) prod *= i;
+    for (var i = combLength, combProd = 1; i--; ) {
+      for (var j in combinations[i]) combProd *= j;
+      sum += 1 / combProd / combProd;
+    }
+    return abs(prod) * sqrt(sum + x / prod);
   }
+  Math['hypot']['length'] = 2;
 }
 
 var sinh  = Math['sinh'];
