@@ -79,18 +79,41 @@ if (!Math['hypot']) {
     if (length == 2) return x * sqrt(1 + (y /= x) * y);
     if (length == 3) {
       var prod = x * y;
-      // 1 / y / y == 1 / (y * y)
+      // 1 / (y * y) == 1 / y / y
       return abs(prod) * sqrt(1 / x / x + 1 / y / y + 1 / prod / prod)
     }
-    var lastTerm = args.shift(); // get last term, not first
-    var product = 1;
+    length -= 2;
+    var getCombs = function (array, n) {
+      for (var i in array) {
+        if (i.constructor !== Array) i = [i];
+      }
+      var thisEntry  = array.pop();
+      var length     = array.length - 1;
+      var numOfCombs = (undef(n)) ? length - 1 : n;
+      var i          = length;
+      var ret        = [];
+      var j, element, childComb;
+      if (numOfCombs == 1) {
+        for (i in array) ret.push([array[i]]);
+        return ret;
+      }
+      for (i = length; i--; ) {
+        element   = array.pop();
+        childComb = getCombs(array, n - 1);
+        for (j = childComb.length; j--; ) {
+          ret.push(element[0].concat(childComb[j]));
+        }
+      }
+      return ret; // optimize
+    }
+    var lastTerm = args.pop();
+    var product  = 1;
     
     // TODO: needs to be found...check the following link for details:
     // http://stackoverflow.com/questions/22290380/programmatically-getting-list-of-combinations
-    var combinations = [];
+    var combinations = getCombs(args, length);
     var combLength = combinations.length - 1;
     var sum = 0;
-    length -= 2;
     for (var i in args) prod *= i;
     for (var i = combLength, combProd = 1; i--; ) {
       for (var j in combinations[i]) combProd *= j;
