@@ -6,6 +6,38 @@
 
 (function (global) {
 
+function exportFunctions() {
+  ComplexNumber.fn['toString']      = ComplexNumber.fn.toString;
+  ComplexNumber.fn['real']          = ComplexNumber.fn.real;
+  ComplexNumber.fn['imag']          = ComplexNumber.fn.imag;
+  ComplexNumber.fn['realToComplex'] = ComplexNumber.fn.realToComplex;
+  ComplexNumber.fn['imagToComplex'] = ComplexNumber.fn.imagToComplex;
+  ComplexNumber.fn['plus']          = ComplexNumber.fn.plus;
+  ComplexNumber.fn['minus']         = ComplexNumber.fn.minus;
+  ComplexNumber.fn['times']         = ComplexNumber.fn.times;
+  ComplexNumber.fn['divide']        = ComplexNumber.fn.divide;
+  ComplexNumber.fn['recip']         = ComplexNumber.fn.recip;
+  ComplexNumber.fn['arg']           = ComplexNumber.fn.arg;
+  ComplexNumber.fn['abs']           = ComplexNumber.fn.abs;
+  ComplexNumber.fn['conj']          = ComplexNumber.fn.conj;
+  ComplexNumber.fn['negate']        = ComplexNumber.fn.negate;
+  ComplexNumber.fn['exp']           = ComplexNumber.fn.exp;
+  ComplexNumber.fn['sin']           = ComplexNumber.fn.sin;
+  ComplexNumber.fn['cos']           = ComplexNumber.fn.cos;
+  ComplexNumber.fn['tan']           = ComplexNumber.fn.tan;
+  ComplexNumber.fn['log']           = ComplexNumber.fn.log;
+  ComplexNumber.fn['sqrt']          = ComplexNumber.fn.sqrt;
+  ComplexNumber.fn['sinh']          = ComplexNumber.fn.sinh;
+  ComplexNumber.fn['cosh']          = ComplexNumber.fn.cosh;
+  ComplexNumber.fn['tanh']          = ComplexNumber.fn.tanh;
+  
+  ComplesNumber.prototype = ComplexNumber.fn;
+  
+  delete ComplexNumber.fn; // reduce footprint
+  
+  global['ComplexNumber'] = ComplexNumber;
+}
+
 var MyTypeError = TypeError; // alias to help minify
 var type        = Object.prototype.toString.call;
 
@@ -151,29 +183,6 @@ if (Math['hypot']) {
   var hypot = function (x, y) {
     return x * sqrt(1 + (y /= x) * y);
   }
-}
-
-function exportFunctions() {
-  ComplexNumber.prototype['toString'] = ComplexNumber.prototype.toString;
-  ComplexNumber.prototype['plus']     = ComplexNumber.prototype.plus;
-  ComplexNumber.prototype['minus']    = ComplexNumber.prototype.minus;
-  ComplexNumber.prototype['times']    = ComplexNumber.prototype.times;
-  ComplexNumber.prototype['divide']   = ComplexNumber.prototype.divide;
-  ComplexNumber.prototype['recip']    = ComplexNumber.prototype.recip;
-  ComplexNumber.prototype['arg']      = ComplexNumber.prototype.arg;
-  ComplexNumber.prototype['real']     = ComplexNumber.prototype.real;
-  ComplexNumber.prototype['imag']     = ComplexNumber.prototype.imag;
-  ComplexNumber.prototype['conj']     = ComplexNumber.prototype.conj;
-  ComplexNumber.prototype['negate']   = ComplexNumber.prototype.negate;
-  ComplexNumber.prototype['exp']      = ComplexNumber.prototype.exp;
-  ComplexNumber.prototype['sin']      = ComplexNumber.prototype.sin;
-  ComplexNumber.prototype['cos']      = ComplexNumber.prototype.cos;
-  ComplexNumber.prototype['tan']      = ComplexNumber.prototype.tan;
-  ComplexNumber.prototype['abs']      = ComplexNumber.prototype.abs;
-  ComplexNumber.prototype['length']   = ComplexNumebr.prototype.length;
-  ComplexNumber.prototype['sqrt']     = ComplexNumber.prototype.sqrt;
-  
-  global['ComplexNumber'] = ComplexNumber;
 }
 
 /* constructor  */
