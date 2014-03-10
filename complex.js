@@ -82,7 +82,7 @@ if (!Math['hypot']) {
       // 1 / y / y == 1 / (y * y)
       return abs(prod) * sqrt(1 / x / x + 1 / y / y + 1 / prod / prod)
     }
-    var lastTerm = args.shift();
+    var lastTerm = args.shift(); // get last term, not first
     var product = 1;
     
     // TODO: needs to be found...check the following link for details:
