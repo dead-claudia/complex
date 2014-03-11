@@ -41,6 +41,9 @@ function exportFunctions() {
 var MyTypeError = TypeError; // alias to help minify
 var type        = Object.prototype.toString.call;
 
+/**
+ * @override
+ */
 var isNaN = function (num) { // override global method for here
   return !(type(num) == '[object number]' || !isFinite(num));
 };
@@ -49,18 +52,36 @@ var isNaN = function (num) { // override global method for here
 if (type(null) != '[object null]') return;
 
 /* Helper functions */
+
+/**
+ * @param {number} real
+ * @param {number} imag
+ * @return {ComplexNumber}
+ */
 var newComplexNumber = function (real, imag) {
   return new ComplexNumber(real, imag);
 };
 
+/**
+ * @param {Object} obj
+ * @return {boolean}
+ */
 var isNumber = function (obj) {
   return (type(obj) == '[object number]');
 };
 
+/**
+ * @param {number} num
+ * @return {ComplexNumber}
+ */
 var realToComplex = function (num) {
   return newComplexNumber(num, 0);
 };
 
+/**
+ * @param {number} num
+ * @return Complexnumber}
+ */
 var imagToComplex = function (num) {
   return newComplexNumber(0, num);
 };
@@ -82,6 +103,10 @@ var pi   = Math['PI'];
 if (Math['sinh']) {
   var sinh = Math['sinh'];
 } else {
+  /**
+   * @param {number} num
+   * @return {number}
+   */
   var sinh = function (num) {
     var p = exp(num);
     return (p - 1 / p) / 2;
@@ -90,6 +115,10 @@ if (Math['sinh']) {
 if (Math['cosh']) {
   var cosh = Math['cosh'];
 } else {
+  /**
+   * @param {number} num
+   * @return {number}
+   */
   var cosh = function (num) {
     var p = exp(num);
     return (p + 1 / p) / 2;
@@ -98,6 +127,10 @@ if (Math['cosh']) {
 if (Math['tanh']) {
   var tanh = Math['tanh'];
 } else {
+  /**
+   * @param {number} num
+   * @return {number}
+   */
   var tanh = function (num) {
     var p = exp(num);
     var r = 1 / p;
@@ -112,18 +145,22 @@ if (Math['hypot']) {
   }
 }
 
-/* constructor  */
+/**
+ * @constructor
+ */
 var ComplexNumber = function (real, imaginary) {
   this.re = real;
   this.im = imaginary;
 };
 
 ComplexNumber.prototype = {
-  constructor: ComplexNumber,
-  
   // the length property of this object is two
-  length = 2,
+  /** @const */ length = 2,
   
+  /**
+   * @param {ComplexNumber} num
+   * @return {string}
+   */
   toString: function (num) {
     var real = (def(num)) ? num.re : this.re;
     var imag = (def(num)) ? num.im : this.im;
@@ -149,24 +186,46 @@ ComplexNumber.prototype = {
     return real + pm + imag + 'i';
   },
   
+  /**
+   * @param {number} num
+   * @return {number}
+   */
   real: function (num) {
     return (def(num)) ? num.re : this.re;
   },
   
+  /**
+   * @param {number} num
+   * @return {number}
+   */
   imag: function (num) {
     return (def(num)) ? num.im : this.im;
   },
   
+  /**
+   * @param {number} num
+   * @return {ComplexNumber}
+   */
   realToComplex: function (num) {
     if (def(this)) num = this;
     return realToComplex(num);
   },
   
+  /**
+   * @param {number} num
+   * @return {ComplexNumber}
+   */
   imagToComplex: function (num) {
     if (def(this)) num = this;
     return imagToComplex(num);
   },
   
+  /**
+   * @param {number|ComplexNumber} numOne
+   * @param {number|ComplexNumber} [numTwo]
+   * @this {ComplexNumber}
+   * @return {ComplexNumber}
+   */
   plus: function (numOne, numTwo) {
     if (def(this)) numTwo = this;
     if (isNumber(numOne))
