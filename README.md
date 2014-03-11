@@ -3,9 +3,8 @@ Complex.js
 
 Complex number implementation in Javascript
 
-It also extends the Math Object with implementations of some
-ECMAScript 6/Harmony extensions for previous versions of
-ECMAScript. This will be also contained in the file.
+<strong>NOTE: This is a work in progress. Please don't assume that
+this is ready to be included in production code.</strong>
 
 The source is in complex.js, and the latest stable minified
 source will be in complex.min.js once ready.
