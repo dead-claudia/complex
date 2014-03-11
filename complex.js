@@ -38,11 +38,14 @@ function exportFunctions() {
   global['ComplexNumber'] = ComplexNumber;
 }
 
-var MyTypeError = TypeError; // alias to help minify
-var type        = Object.prototype.toString.call;
+/* Helper functions to help minify code */
+
+/** @protected */ var MyTypeError = TypeError;
+/** @protected */ var type        = Object.prototype.toString.call;
 
 /**
  * @override
+ * @protected
  */
 var isNaN = function (num) { // override global method for here
   return !(type(num) == '[object number]' || !isFinite(num));
@@ -57,6 +60,7 @@ if (type(null) != '[object null]') return;
  * @param {number} real
  * @param {number} imag
  * @return {ComplexNumber}
+ * @protected
  */
 var newComplexNumber = function (real, imag) {
   return new ComplexNumber(real, imag);
@@ -65,6 +69,7 @@ var newComplexNumber = function (real, imag) {
 /**
  * @param {Object} obj
  * @return {boolean}
+ * @protected
  */
 var isNumber = function (obj) {
   return (type(obj) == '[object number]');
@@ -73,6 +78,7 @@ var isNumber = function (obj) {
 /**
  * @param {number} num
  * @return {ComplexNumber}
+ * @protected
  */
 var realToComplex = function (num) {
   return newComplexNumber(num, 0);
@@ -80,32 +86,39 @@ var realToComplex = function (num) {
 
 /**
  * @param {number} num
- * @return Complexnumber}
+ * @return {Complexnumber}
+ * @protected
  */
 var imagToComplex = function (num) {
   return newComplexNumber(0, num);
 };
 
+/**
+ * @param {number} num
+ * @return {boolean}
+ * @protected
+ */
 var def = function (num) {
   return (typeof num != 'undefined')
 };
 
-var abs  = Math.abs;
-var sin  = Math.sin;
-var cos  = Math.cos;
-var tan  = Math.tan;
-var exp  = Math.exp;
-var pow  = Math.pow;
-var sqrt = Math.sqrt;
-var pi   = Math['PI'];
+/** @protected */ var abs  = Math.abs;
+/** @protected */ var sin  = Math.sin;
+/** @protected */ var cos  = Math.cos;
+/** @protected */ var tan  = Math.tan;
+/** @protected */ var exp  = Math.exp;
+/** @protected */ var pow  = Math.pow;
+/** @protected */ var sqrt = Math.sqrt;
+/** @protected */ var pi   = Math['PI'];
 
 /* define methods if they aren't already defined in the Math object */
 if (Math['sinh']) {
-  var sinh = Math['sinh'];
+  /** @protected */ var sinh = Math['sinh'];
 } else {
   /**
    * @param {number} num
    * @return {number}
+   * @proteced
    */
   var sinh = function (num) {
     var p = exp(num);
@@ -113,11 +126,12 @@ if (Math['sinh']) {
   };
 }
 if (Math['cosh']) {
-  var cosh = Math['cosh'];
+  /** @protected */ var cosh = Math['cosh'];
 } else {
   /**
    * @param {number} num
    * @return {number}
+   * @proteced
    */
   var cosh = function (num) {
     var p = exp(num);
@@ -125,11 +139,12 @@ if (Math['cosh']) {
   };
 }
 if (Math['tanh']) {
-  var tanh = Math['tanh'];
+  /** @protected */ var tanh = Math['tanh'];
 } else {
   /**
    * @param {number} num
    * @return {number}
+   * @proteced
    */
   var tanh = function (num) {
     var p = exp(num);
@@ -140,6 +155,12 @@ if (Math['tanh']) {
 if (Math['hypot']) {
   var hypot = Math['hypot'];
 } else {
+  /**
+   * @param {number} x
+   * @param {number} y
+   * @return {number}
+   * @proteced
+   */
   var hypot = function (x, y) {
     return x * sqrt(1 + (y /= x) * y);
   }
@@ -147,23 +168,43 @@ if (Math['hypot']) {
 
 /**
  * @constructor
+ * @struct
+ * @param {number} real
+ * @param {number} imag
  */
 var ComplexNumber = function (real, imaginary) {
-  this.re = real;
-  this.im = imaginary;
+  var re = real;
+  var im = imaginary;
+  
+  /**
+   * @private
+   */
+  get real = function () {
+    return re;
+  };
+  
+  /**
+   * @private
+   */
+  get imag = function () {
+    return im;
+  };
 };
 
 ComplexNumber.prototype = {
   // the length property of this object is two
+  /** @expose */
   /** @const */ length = 2,
   
   /**
-   * @param {ComplexNumber} num
+   * @overrride
+   * @param {ComplexNumber} [num]
+   * @this {ComplexNumber}
    * @return {string}
    */
-  toString: function (num) {
-    var real = (def(num)) ? num.re : this.re;
-    var imag = (def(num)) ? num.im : this.im;
+  toString: function () {
+    var real = this.real;
+    var imag = this.imag;
     var positive; // combine variable declarations to help minify some
     var pm;
     
@@ -188,42 +229,25 @@ ComplexNumber.prototype = {
   
   /**
    * @param {number} num
-   * @return {number}
-   */
-  real: function (num) {
-    return (def(num)) ? num.re : this.re;
-  },
-  
-  /**
-   * @param {number} num
-   * @return {number}
-   */
-  imag: function (num) {
-    return (def(num)) ? num.im : this.im;
-  },
-  
-  /**
-   * @param {number} num
    * @return {ComplexNumber}
    */
   realToComplex: function (num) {
-    if (def(this)) num = this;
     return realToComplex(num);
   },
   
   /**
    * @param {number} num
+   * @this {(?number|undefined)}
    * @return {ComplexNumber}
    */
   imagToComplex: function (num) {
-    if (def(this)) num = this;
     return imagToComplex(num);
   },
   
   /**
    * @param {number|ComplexNumber} numOne
    * @param {number|ComplexNumber} [numTwo]
-   * @this {ComplexNumber}
+   * @this {(?ComplexNumber|undefined)}
    * @return {ComplexNumber}
    */
   plus: function (numOne, numTwo) {
@@ -238,6 +262,12 @@ ComplexNumber.prototype = {
                             numTwo.im + numOne.im);
   },
   
+  /**
+   * @param {number|ComplexNumber} numOne
+   * @param {number|ComplexNumber} [numTwo]
+   * @this {(?ComplexNumber|undefined)}
+   * @return {ComplexNumber}
+   */
   minus: function (numOne, numTwo) {
     if (def(this)) {
       numTwo = numOne;
@@ -253,6 +283,12 @@ ComplexNumber.prototype = {
                             numTwo.im - numOne.im);
   },
   
+  /**
+   * @param {number|ComplexNumber} numOne
+   * @param {number|ComplexNumber} [numTwo]
+   * @this {(?ComplexNumber|undefined)}
+   * @return {ComplexNumber}
+   */
   times: function (numOne, numTwo) {
     if (def(this)) numTwo = this;
     if (isNumber(numOne))
@@ -267,6 +303,12 @@ ComplexNumber.prototype = {
                             numOne.im * numTwo.im);
   },
   
+  /**
+   * @param {number|ComplexNumber} numOne
+   * @param {number|ComplexNumber} [numTwo]
+   * @this {(?ComplexNumber|undefined)}
+   * @return {ComplexNumber}
+   */
   divide: function (numOne, numTwo) {
     if (def(this)) {
       numTwo = numOne;
@@ -281,6 +323,10 @@ ComplexNumber.prototype = {
     return numOne.times(numTwo.reciprocal());
   },
   
+  /**
+   * @this {ComplexNumber}
+   * @return {ComplexNumber}
+   */
   recip: function (num) {
     if (def(this)) num = this;
     var scale = num.re * num.re + num.im * num.im;
@@ -289,16 +335,6 @@ ComplexNumber.prototype = {
   
   arg: function (num) {
     if (def(this)) num = this;
-    var real = num.re;
-    var imag = num.im;
-    if (isNaN(real) || isNaN(imag)) return NaN;
-    if 
-    if (real === +0) {
-      if (imag === +0) return +0;
-      return +(pi / 2)
-      // TODO: finish using this as a guide:
-      // https://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/carg.3.html
-    }
     return Math.atan2(num.im, num.re);
   },
   
@@ -306,7 +342,8 @@ ComplexNumber.prototype = {
     if (def(this)) num = this;
     var real = num.re;
     var imag = num.im;
-    if (imag) return abs(real);
+    if (!imag) return abs(real);
+    if (!real) return 
     return hypot(num.im, num.re);
   },
   
@@ -324,7 +361,7 @@ ComplexNumber.prototype = {
     if (def(this)) num = this;
     var real = num.re;
     var imag = num.im;
-    if (imag)) return realToComplex(exp(real));
+    if (!imag) return realToComplex(exp(real));
     return newComplexNumber(exp(real) * cos(imag),
                             exp(real) * sin(imag));
   },
@@ -333,7 +370,7 @@ ComplexNumber.prototype = {
     if (def(this)) num = this;
     var real = num.re;
     var imag = num.im;
-    if (imag) return realToComplex(sin(real));
+    if (!imag) return realToComplex(sin(real));
     return newComplexNumber(sin(real) * cosh(imag),
                             cos(real) * sinh(imag));
   },
