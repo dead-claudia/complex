@@ -146,17 +146,17 @@ var ComplexNumber = function (real, imaginary) {
    * @private
    * @return {number}
    */
-  get real = function () {
+  this['real'] = function () {
     return re;
-  };
+  }
   
   /**
    * @private
    * @return {number}
    */
-  get imag = function () {
+  this['imag'] = function () {
     return im;
-  };
+  }
   
   /**
    * @param {number|ComplexNumber} num
@@ -397,10 +397,6 @@ ComplexNumber.prototype = {
     return real + pm + imag + 'i';
   }
 };
-
-ComplexNumber['real'] = ComplexNumber.real;
-ComplexNumber['imag'] = ComplexNumber.imag;
-
 
 ComplexNumber['realToComplex'] = realToComplex;
 ComplexNumber['imagToComplex'] = imagToComplex;
