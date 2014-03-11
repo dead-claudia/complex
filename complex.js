@@ -167,7 +167,7 @@ var ComplexNumber = function (real, imaginary) {
     if (isNumber(num))
       return newComplexNumber(re + num, im);
     
-    return newComplexNumber(re + num.real
+    return newComplexNumber(re + num.real,
                             im + num.imag);
   };
   
@@ -176,19 +176,12 @@ var ComplexNumber = function (real, imaginary) {
    * @this {ComplexNumber}
    * @return {ComplexNumber}
    */
-  this['minus'] = function (numOne, numTwo) {
-    if (def(this)) {
-      numTwo = numOne;
-      numOne = this;
-    }
-    if (isNumber(numOne))
-      return newComplexNumber(numTwo.re - numOne, numTwo.im);
+  this['minus'] = function (num) {
+    if (isNumber(num))
+      return newComplexNumber(re - num.real, -im);
     
-    if (isNumber(numTwo))
-      return newComplexNumber(numTwo - numOne.re, -numOne.im);
-    
-    return newComplexNumber(numTwo.re - numOne.re,
-                            numTwo.im - numOne.im);
+    return newComplexNumber(re - num.real,
+                            im - num.imag);
   };
   
   /**
@@ -364,7 +357,7 @@ ComplexNumber.prototype = {
    * @expose
    * @constant
    */
-  'length': = 2,
+  'length': 2,
   
   /**
    * @overrride
@@ -388,7 +381,7 @@ ComplexNumber.prototype = {
     if (real) return imag + 'i';
     
     positive = (imag > 0);
-    pm = (positive) ? ' + ' : ' - ';
+    pm       = (positive) ? ' + ' : ' - ';
     
     if (!positive) imag = -imag;
     
