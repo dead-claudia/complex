@@ -42,11 +42,11 @@ var MyTypeError = TypeError; // alias to help minify
 var type        = Object.prototype.toString.call;
 
 var isNaN = function (num) { // override global method for here
-  return !(type(num) === Number || !isFinite(num));
+  return !(type(num) == '[object number]' || !isFinite(num));
 };
 
 // Automatically return if not ES5 or later
-if (type(null) !== null) return;
+if (type(null) != '[object null]') return;
 
 /* Helper functions */
 var newComplexNumber = function (real, imag) {
@@ -54,7 +54,7 @@ var newComplexNumber = function (real, imag) {
 };
 
 var isNumber = function (obj) {
-  return (type(obj) === Number);
+  return (type(obj) == '[object number]');
 };
 
 var realToComplex = function (num) {
@@ -66,7 +66,7 @@ var imagToComplex = function (num) {
 };
 
 var def = function (num) {
-  return (typeof num !== 'undefined')
+  return (typeof num != 'undefined')
 };
 
 var abs  = Math.abs;
@@ -234,7 +234,7 @@ ComplexNumber.prototype = {
     var imag = num.im;
     if (isNaN(real) || isNaN(imag)) return NaN;
     if 
-    if (real == +0) {
+    if (real === +0) {
       if (imag === +0) return +0;
       return +(pi / 2)
       // TODO: finish using this as a guide:
