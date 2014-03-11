@@ -1,4 +1,4 @@
-/* @preserve
+/** @preserve
  * Complex.js
  * Copyright Isiah Meadows
  * Licensed under GNU GPL v3 or later
@@ -35,7 +35,7 @@ var newComplexNumber = function (real, imag) {
 };
 
 /**
- * @param {Object} obj
+ * @param {Object|null|number} obj
  * @return {boolean}
  * @protected
  */
@@ -53,7 +53,7 @@ var realToComplex = function (num) {
 
 /**
  * @param {number} num
- * @return {Complexnumber}
+ * @return {ComplexNumber}
  */
 var imagToComplex = function (num) {
   return newComplexNumber(0, num);
@@ -65,7 +65,7 @@ var imagToComplex = function (num) {
  * @protected
  */
 var def = function (num) {
-  return (type != '[object undefined]')
+  return (type(num) != '[object undefined]')
 };
 
 /** @protected */ var abs  = Math['abs'];
@@ -84,7 +84,7 @@ if (Math['sinh']) {
   /**
    * @param {number} num
    * @return {number}
-   * @proteced
+   * @protected
    */
   var sinh = function (num) {
     var p = exp(num);
@@ -97,7 +97,7 @@ if (Math['cosh']) {
   /**
    * @param {number} num
    * @return {number}
-   * @proteced
+   * @protected
    */
   var cosh = function (num) {
     var p = exp(num);
@@ -110,7 +110,7 @@ if (Math['tanh']) {
   /**
    * @param {number} num
    * @return {number}
-   * @proteced
+   * @protected
    */
   var tanh = function (num) {
     var p = exp(num);
@@ -125,7 +125,7 @@ if (Math['hypot']) {
    * @param {number} x
    * @param {number} y
    * @return {number}
-   * @proteced
+   * @protected
    */
   var hypot = function (x, y) {
     return x * sqrt(1 + (y /= x) * y);
@@ -134,7 +134,7 @@ if (Math['hypot']) {
 
 /**
  * @constructor
- * @struct
+ * @class
  * @param {number} real
  * @param {number} imaginary
  */
@@ -235,7 +235,7 @@ var ComplexNumber = function (real, imaginary) {
    */
   this['abs'] = function () {
     if (!im) return abs(re);
-    if (!re) return 
+    if (!re) return abs(im);
     return hypot(im, re);
   };
   
