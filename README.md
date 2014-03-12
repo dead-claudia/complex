@@ -37,189 +37,189 @@ and is not the version meant for standard use.</strong>
 
 - **ComplexNumber.real** - real part
   
-  Returns: `Number`
+  ***Returns:*** `Number`
 
 - **ComplexNumber.imag** - imaginary part
   
-  Returns: `Number`
+  ***Returns:*** `Number`
 
 - **ComplexNumber.prototype.length**
   
-  Returns: `Number`
+  ***Returns:*** `Number`
   The length of this class is always 2.
 
 ### Methods: ###
 
 - **.toString**() - stringifies it to the form `'a + bi'`
   
-  Arguments:
+  ***Arguments:***
   
   - *this* - a ComplexNumber instance
   
-  Returns: `String`
+  ***Returns:*** `String`
 
 - **.plus**(*num*) - adds a number to a ComplexNumber
   
-  Arguments:
+  ***Arguments:***
   
   - *this* - a ComplexNumber instance
   - (ComplexNumber|Number) *num* - the number to add
   
-  Returns: `String`
+  ***Returns:*** `String`
 
 - **.minus**(*num*) - subtracts a number from a ComplexNumber
   
-  Arguments:
+  ***Arguments:***
   
   - *this* - a ComplexNumber instance
   - (ComplexNumber|Number) *num* - the number to subtract
   
-  Returns: `ComplexNumber`
+  ***Returns:*** `ComplexNumber`
 
 - **.times**(*num*) - multiplies a number with a ComplexNumber
   
-  Arguments:
+  ***Arguments:***
   
   - *this* - a ComplexNumber instance
   - (ComplexNumber|Number) *num* - the number to multiply
   
-  Returns: `ComplexNumber`
+  ***Returns:*** `ComplexNumber`
 
 - **.divide**(*num*) - divides a number from a ComplexNumber
   
-  Arguments:
+  ***Arguments:***
   
   - *this* - a ComplexNumber instance
   - (ComplexNumber|Number) *num* - the number to divide
   
-  Returns: `ComplexNumber`
+  ***Returns:*** `ComplexNumber`
 
 - **.recip**() - returns the reciprocal of a ComplexNumber
   
-  Arguments:
+  ***Arguments:***
   
   - *this* - a ComplexNumber instance
   
-  Returns: `ComplexNumber`
+  ***Returns:*** `ComplexNumber`
 
 - **.arg**() - returns the angle/argument of a ComplexNumber
   
-  Arguments:
+  ***Arguments:***
   
   - *this* - a ComplexNumber instance
   
-  Returns: `Number`
+  ***Returns:*** `Number`
 
 - **.abs**() - returns the absolute value/modulus of a ComplexNumber
   
-  Arguments:
+  ***Arguments:***
   
   - *this* - a ComplexNumber instance
   
-  Returns: `Number`
+  ***Returns:*** `Number`
 
 - **.conj**() - returns the conjugate of a ComplexNumber
   
-  Arguments:
+  ***Arguments:***
   
   - *this* - a ComplexNumber instance
   
-  Returns: `ComplexNumber`
+  ***Returns:*** `ComplexNumber`
 
 - **.negate**() - returns the negative of a ComplexNumber
   
-  Arguments:
+  ***Arguments:***
   
   - *this* - a ComplexNumber instance
   
-  Returns: `ComplexNumber`
+  ***Returns:*** `ComplexNumber`
 
 - **.exp**() - returns *e* raised to the power of a ComplexNumber
   
-  Arguments:
+  ***Arguments:***
   
   - *this* - a ComplexNumber instance
   
-  Returns: `ComplexNumber`
+  ***Returns:*** `ComplexNumber`
 
 - **.sin**() - returns the sine of a ComplexNumber
   
-  Arguments:
+  ***Arguments:***
   
   - *this* - a ComplexNumber instance
   
-  Returns: `ComplexNumber`
+  ***Returns:*** `ComplexNumber`
 
 - **.cos**() - returns the cosine of a ComplexNumber
   
-  Arguments:
+  ***Arguments:***
   
   - *this* - a ComplexNumber instance
   
-  Returns: `ComplexNumber`
+  ***Returns:*** `ComplexNumber`
 
 - **.tan**() - returns the tangent of a ComplexNumber
   
-  Arguments:
+  ***Arguments:***
   
   - *this* - a ComplexNumber instance
   
-  Returns: `ComplexNumber`
+  ***Returns:*** `ComplexNumber`
 
 - **.log**() - returns the logarithm of a ComplexNumber
   
-  Arguments:
+  ***Arguments:***
   
   - *this* - a ComplexNumber instance
   
-  Returns: `ComplexNumber`
+  ***Returns:*** `ComplexNumber`
 
 - **.sqrt**() - returns the square root of a ComplexNumber
   
-  Arguments:
+  ***Arguments:***
   
   - *this* - a ComplexNumber instance
   
-  Returns: `ComplexNumber`
+  ***Returns:*** `ComplexNumber`
 
 - **.sinh**() - returns the hyperbolic sine of a ComplexNumber
   
-  Arguments:
+  ***Arguments:***
   
   - *this* - a ComplexNumber instance
   
-  Returns: `ComplexNumber`
+  ***Returns:*** `ComplexNumber`
 
 - **.cosh**() - returns the hyperbolic cosine of a ComplexNumber
   
-  Arguments:
+  ***Arguments:***
   
   - *this* - a ComplexNumber instance
   
-  Returns: `ComplexNumber`
+  ***Returns:*** `ComplexNumber`
 
 - **.tanh**() - returns the hyperbolic tangent of a ComplexNumber
   
-  Arguments:
+  ***Arguments:***
   
   - *this* - a ComplexNumber instance
   
-  Returns: `ComplexNumber`
+  ***Returns:*** `ComplexNumber`
 
 - **ComplexNumber.realToComplex**(*real*) - static method to convert a real
   number to a ComplexNumber instance
   
-  Arguments:
+  ***Arguments:***
   
   - *real* - the real number to convert
   
-  Returns: `ComplexNumber`
+  ***Returns:*** `ComplexNumber`
 
 - **ComplexNumber.imagToComplex**(*imaginary*) - static method to convert an
   imaginary number to a ComplexNumber instance
   
-  Arguments:
+  ***Arguments:***
   
   - *real* - the coefficient of the imaginary number to convert
   
-  Returns: `ComplexNumber`
+  ***Returns:*** `ComplexNumber`
