@@ -15,7 +15,7 @@
  * @param {Object|null|number} obj
  * @protected
  */
-var type = function (obj) {
+function type(obj) {
   return Object.prototype.toString.call(obj).slice(8, -1);
 }
 
@@ -37,6 +37,16 @@ function freeze(obj) {
     deepFreeze(prop);
   }
 }
+
+/**
+ * @param {Object} object
+ * @param {string} publicName
+ * @param {*} symbol
+ * @see goog.exportProperty() for original source code
+ */
+function exportProperty(object, publicName, symbol) {
+  object[publicName] = symbol;
+};
 
 /**
  * @override
@@ -426,30 +436,36 @@ ComplexNumber.prototype = {
   }
 };
 
-ComplexNumber.prototype['toString'] = ComplexNumber.prototype.toString;
-ComplexNumber.prototype['plus']     = ComplexNumber.prototype.plus;
-ComplexNumber.prototype['minus']    = ComplexNumber.prototype.minus;
-ComplexNumber.prototype['times']    = ComplexNumber.prototype.times;
-ComplexNumber.prototype['divide']   = ComplexNumber.prototype.divide;
-ComplexNumber.prototype['recip']    = ComplexNumber.prototype.recip;
-ComplexNumber.prototype['arg']      = ComplexNumber.prototype.arg;
-ComplexNumber.prototype['abs']      = ComplexNumber.prototype.abs;
-ComplexNumber.prototype['conj']     = ComplexNumber.prototype.conj;
-ComplexNumber.prototype['negate']   = ComplexNumber.prototype.negate;
-ComplexNumber.prototype['exp']      = ComplexNumber.prototype.exp;
-ComplexNumber.prototype['sin']      = ComplexNumber.prototype.sin;
-ComplexNumber.prototype['cos']      = ComplexNumber.prototype.cos;
-ComplexNumber.prototype['tan']      = ComplexNumber.prototype.tan;
-ComplexNumber.prototype['log']      = ComplexNumber.prototype.log;
-ComplexNumber.prototype['sqrt']     = ComplexNumber.prototype.sqrt;
-ComplexNumber.prototype['sinh']     = ComplexNumber.prototype.sinh;
-ComplexNumber.prototype['cosh']     = ComplexNumber.prototype.cosh;
-ComplexNumber.prototype['tanh']     = ComplexNumber.prototype.tanh;
+exportProperty(ComplexNumber.prototype, 'toString', ComplexNumber.prototype.toString);
+exportProperty(ComplexNumber.prototype, 'plus', ComplexNumber.prototype.plus);
+exportProperty(ComplexNumber.prototype, 'minus', ComplexNumber.prototype.minus);
+exportProperty(ComplexNumber.prototype, 'times', ComplexNumber.prototype.times);
+exportProperty(ComplexNumber.prototype, 'divide', ComplexNumber.prototype.divide);
+exportProperty(ComplexNumber.prototype, 'recip', ComplexNumber.prototype.recip);
+exportProperty(ComplexNumber.prototype, 'arg', ComplexNumber.prototype.arg);
+exportProperty(ComplexNumber.prototype, 'abs', ComplexNumber.prototype.abs);
+exportProperty(ComplexNumber.prototype, 'conj', ComplexNumber.prototype.conj);
+exportProperty(ComplexNumber.prototype, 'times', ComplexNumber.prototype.times);
+exportProperty(ComplexNumber.prototype, 'divide', ComplexNumber.prototype.divide);
+exportProperty(ComplexNumber.prototype, 'recip', ComplexNumber.prototype.recip);
+exportProperty(ComplexNumber.prototype, 'arg', ComplexNumber.prototype.arg);
+exportProperty(ComplexNumber.prototype, 'abs', ComplexNumber.prototype.abs);
+exportProperty(ComplexNumber.prototype, 'conj', ComplexNumber.prototype.conj);
+exportProperty(ComplexNumber.prototype, 'negate', ComplexNumber.prototype.negate);
+exportProperty(ComplexNumber.prototype, 'exp', ComplexNumber.prototype.exp);
+exportProperty(ComplexNumber.prototype, 'sin', ComplexNumber.prototype.sin);
+exportProperty(ComplexNumber.prototype, 'cos', ComplexNumber.prototype.cos);
+exportProperty(ComplexNumber.prototype, 'tan', ComplexNumber.prototype.tan);
+exportProperty(ComplexNumber.prototype, 'log', ComplexNumber.prototype.log);
+exportProperty(ComplexNumber.prototype, 'sqrt', ComplexNumber.prototype.sqrt);
+exportProperty(ComplexNumber.prototype, 'sinh', ComplexNumber.prototype.sinh);
+exportProperty(ComplexNumber.prototype, 'cosh', ComplexNumber.prototype.cosh);
+exportProperty(ComplexNumber.prototype, 'tanh', ComplexNumber.prototype.tanh);
 
-ComplexNumber['realToComplex'] = realToComplex;
-ComplexNumber['imagToComplex'] = imagToComplex;
+exportProperty(ComplexNumber, 'realToComplex', realToComplex);
+exportProperty(ComplexNumber, 'imagToComplex', imagToComplex);
 
-global['ComplexNumber'] = ComplexNumber;
+exportProperty(global, 'ComplexNumber', ComplexNumber);
 
 // This class is immutable.
 freeze(global['ComplexNumber']);
