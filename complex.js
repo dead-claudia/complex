@@ -6,21 +6,48 @@
 
 (function (global) {
 
-/* Helper functions to help minify code */
+/* Helper functions and aliases to help minify code */
 
-/** @protected */ var MyTypeError = TypeError;
-/** @protected */ var type        = Object.prototype.toString.call;
+/** @protected */ var isFin = isFinite;
+
+/**
+ * removes excess from Object.prototype.toString.call();
+ * @param {Object|null|number} obj
+ * @protected
+ */
+var type = function (obj) {
+  return Object.prototype.toString.call(obj).slice(8, -1);
+}
+
+/**
+ * Fully freezes object to make it immutable
+ * @param {Object} obj
+ * @protected
+ */
+function freeze(obj) {
+  var prop, propKey;
+  Object.freeze(obj);
+  for (propKey in obj) {
+    prop = obj[propKey];
+    if (!obj.hasOwnProperty(propKey) ||
+        !(typeof prop === "object")  ||
+        Object.isFrozen(prop)) {
+      continue;
+    }
+    deepFreeze(prop);
+  }
+}
 
 /**
  * @override
  * @protected
  */
 var isNaN = function (num) { // override global method for here
-  return !(type(num) == '[object number]' || !isFinite(num));
+  return !(type(num) == 'Number' || !isFin(num));
 };
 
 // Automatically return if not ES5 or later...slight hack
-if (type(null) != '[object null]') return;
+if (type(null) != 'Null') return;
 
 /* Helper functions */
 
@@ -40,7 +67,7 @@ var newComplexNumber = function (real, imag) {
  * @protected
  */
 var isNumber = function (obj) {
-  return (type(obj) == '[object number]');
+  return (type(obj) == 'Number');
 };
 
 /**
@@ -65,7 +92,7 @@ var imagToComplex = function (num) {
  * @protected
  */
 var def = function (num) {
-  return (type(num) != '[object undefined]')
+  return (type(num) != 'Undefined')
 };
 
 /** @protected */ var abs  = Math['abs'];
@@ -135,237 +162,38 @@ if (Math['hypot']) {
 /**
  * @constructor
  * @class
+ * @expose
  * @param {number} real
  * @param {number} imaginary
  */
 var ComplexNumber = function (real, imaginary) {
-  var re = real;
-  var im = imaginary;
   
   /**
    * @private
-   * @return {number}
+   * @type {number}
    */
-  this['real'] = function () {
-    return re;
-  }
-  
+  this.real = real;
   /**
    * @private
-   * @return {number}
+   * @type {number}
    */
-  this['imag'] = function () {
-    return im;
-  }
-  
-  /**
-   * @param {number|ComplexNumber} num
-   * @this {ComplexNumber}
-   * @return {ComplexNumber}
-   */
-  this['plus'] = function (num) {
-    if (isNumber(num))
-      return newComplexNumber(re + num, im);
-    
-    return newComplexNumber(re + num.real,
-                            im + num.imag);
-  };
-  
-  /**
-   * @param {number|ComplexNumber} num
-   * @this {ComplexNumber}
-   * @return {ComplexNumber}
-   */
-  this['minus'] = function (num) {
-    if (isNumber(num))
-      return newComplexNumber(re - num.real, -im);
-    
-    return newComplexNumber(re - num.real,
-                            im - num.imag);
-  };
-  
-  /**
-   * @param {number|ComplexNumber} num
-   * @this {ComplexNumber}
-   * @return {ComplexNumber}
-   */
-  this['times'] = function (num) {
-    if (isNumber(numTwo))
-      return newComplexNumber(re * num,
-                              im * num);
-    
-    return newComplexNumber(re * num.real,
-                            im * num.imag);
-  };
-  
-  /**
-   * @param {number|ComplexNumber} num
-   * @this {ComplexNumber}
-   * @return {ComplexNumber}
-   */
-  this['divide'] = function (num) {
-    if (isNumber(num)) {
-      return newComplexNumber(re / num,
-                              im / num);
-    }
-    
-    return this.times(num.reciprocal());
-  };
-  
-  /**
-   * @this {ComplexNumber}
-   * @return {ComplexNumber}
-   */
-  this['recip'] = function () {
-    var scale = re * re + im * im;
-    return newComplexNumber(re / scale, im / scale);
-  };
-  
-  /**
-   * @this {ComplexNumber}
-   * @return {number}
-   */
-  this['arg'] = function () {
-    return Math.atan2(im, re);
-  };
-  
-  /**
-   * @this {ComplexNumber}
-   * @return {number}
-   */
-  this['abs'] = function () {
-    if (!im) return abs(re);
-    if (!re) return abs(im);
-    return hypot(im, re);
-  };
-  
-  /**
-   * @this {ComplexNumber}
-   * @return {ComplexNumber}
-   */
-  this['conj'] = function () {
-    return newComplexNumber(re, -im);
-  };
-  
-  /**
-   * @this {ComplexNumber}
-   * @return {ComplexNumber}
-   */
-  this['negate'] = function () {
-    return newComplexNumber(-re, -im);
-  };
-  
-  /**
-   * @this {ComplexNumber}
-   * @return {ComplexNumber}
-   */
-  this['exp'] = function () {
-    if (!im) return realToComplex(exp(re));
-    return newComplexNumber(exp(re) * cos(im),
-                            exp(re) * sin(im));
-  };
-  
-  /**
-   * @this {ComplexNumber}
-   * @return {ComplexNumber}
-   */
-  this['sin'] = function () {
-    if (!im) return realToComplex(sin(re));
-    return newComplexNumber(sin(re) * cosh(im),
-                            cos(re) * sinh(im));
-  };
-  
-  /**
-   * @this {ComplexNumber}
-   * @return {ComplexNumber}
-   */
-  this['cos'] = function () {
-    if (!im) return realToComplex(cos(re));
-    if (!re) return realToComplex(cosh(im));
-    return newComplexNumber(cos(re) * cosh(im),
-                            sin(re) * sinh(im));
-  };
-  
-  /**
-   * @this {ComplexNumber}
-   * @return {ComplexNumber}
-   */
-  this['tan'] = function () {
-    if (!im) return realToComplex(tan(re));
-    if (!re) return imagToComplex(tanh(im));
-    return this.sin().divide(this.cos());
-  };
-  
-  /**
-   * @this {ComplexNumber}
-   * @return {ComplexNumber}
-   */
-  this['log'] = function () {
-    if (im) return realToComplex(log(re));
-    return newComplexNumber(Math.log(this.abs()), this.arg());
-  };
-  
-  /**
-   * @this {ComplexNumber}
-   * @return {ComplexNumber}
-   */
-  this['sqrt'] = function () {
-    var r = this.abs();
-    var t = this.angle() / 2;
-    return newComplexNumber(r * cos(t), r * sin(t));
-  };
-  
-  /**
-   * @this {ComplexNumber}
-   * @return {ComplexNumber}
-   */
-  this['sinh'] = function () {
-    var real = sinh(re);
-    var imag = sin(im);
-    if (!im) return realToComplex(real);
-    if (!re) return imagToComplex(imag);
-    return newComplexNumber(real * cos(im), imag * sinh(re));
-  };
-  
-  /**
-   * @this {ComplexNumber}
-   * @return {ComplexNumber}
-   */
-  this['cosh'] = function () {
-    var real = cosh(re);
-    var imag = cos(im);
-    if (!im) return realToComplex(real);
-    if (!re) return realToComplex(imag);
-    return newComplexNumber(real * imag, sinh(re) * sin(im));
-  };
-  
-  /**
-   * @this {ComplexNumber}
-   * @return {ComplexNumber}
-   */
-  this['tanh'] = function () {
-    if (!im) return realToComplex(tanh(real));
-    if (!re) return imagToComplex(tan(imag));
-    return num.sin().divide(num.cos());
-  };
+  this.imag = imaginary;
 };
 
 ComplexNumber.prototype = {
   // the length property of this object is two
   /**
-   * @override
    * @expose
-   * @constant
+   * @const
    */
-  'length': 2,
+  length: 2,
   
   /**
-   * @overrride
-   * @param {ComplexNumber} [num]
+   * @override
    * @this {ComplexNumber}
    * @return {string}
    */
-  'toString': function () {
+  toString: function () {
     var real = this.real;
     var imag = this.imag;
     var positive; // combine variable declarations to help minify some
@@ -374,7 +202,7 @@ ComplexNumber.prototype = {
     if (isNaN(real) || isNaN(imag))
       return 'NaN';
     
-    if (!isFinite(real) || !isFinite(imag))
+    if (!isFin(real) || !isFin(imag))
       return 'Infinity';
     
     if (imag) return real + '';
@@ -388,12 +216,241 @@ ComplexNumber.prototype = {
     if (imag == 1) return real + pm + 'i';
     
     return real + pm + imag + 'i';
+  },
+  
+  /**
+   * @this {ComplexNumber}
+   * @return {ComplexNumber}
+   */
+  recip: function () {
+    var real = this.real;
+    var imag = this.imag;
+    var scale = real * real + imag * imag;
+    return newComplexNumber(re / scale, im / scale);
+  },
+    
+  /**
+   * @param {(number|ComplexNumber)} num
+   * @this {ComplexNumber}
+   * @return {ComplexNumber}
+   */
+  plus: function (num) {
+    if (isNumber(num))
+      return newComplexNumber(this.real + num, this.imag);
+    
+    return newComplexNumber(this.real + num.real,
+                            this.imag + num.imag);
+  },
+  
+  /**
+   * @param {(number|ComplexNumber)} num
+   * @this {ComplexNumber}
+   * @return {ComplexNumber}
+   */
+  minus: function (num) {
+    if (isNumber(num))
+      return newComplexNumber(this.real - num.real, -this.imag);
+    
+    return newComplexNumber(this.real - num.real,
+                            this.imag - num.imag);
+  },
+  
+  /**
+   * @param {(number|ComplexNumber)} num
+   * @this {ComplexNumber}
+   * @return {ComplexNumber}
+   */
+  times: function (num) {
+    if (isNumber(numTwo))
+      return newComplexNumber(this.real * num,
+                              this.imag * num);
+    
+    return newComplexNumber(this.real * num.real,
+                            this.imag * num.imag);
+  },
+  
+  /**
+   * @param {(number|ComplexNumber)} num
+   * @this {ComplexNumber}
+   * @return {ComplexNumber}
+   */
+  divide: function (num) {
+    if (isNumber(num)) {
+      return newComplexNumber(this.real / num,
+                              this.imag / num);
+    }
+    
+    return this.times(num.recip());
+  },
+  
+  /**
+   * @this {ComplexNumber}
+   * @return {number}
+   */
+  arg: function () {
+    return Math.atan2(this.imag, this.real);
+  },
+  
+  /**
+   * @this {ComplexNumber}
+   * @return {number}
+   */
+  abs: function () {
+    var re = this.real;
+    var im = this.imag;
+    if (!im) return abs(re);
+    if (!re) return abs(im);
+    return hypot(im, re);
+  },
+  
+  /**
+   * @this {ComplexNumber}
+   * @return {ComplexNumber}
+   */
+  conj: function () {
+    return newComplexNumber(this.real, -this.imag);
+  },
+  
+  /**
+   * @this {ComplexNumber}
+   * @return {ComplexNumber}
+   */
+  negate: function () {
+    return newComplexNumber(-this.real, -this.imag);
+  },
+  
+  /**
+   * @this {ComplexNumber}
+   * @return {ComplexNumber}
+   */
+  exp: function () {
+    var re = this.real;
+    var im = this.imag;
+    if (!im) return realToComplex(exp(re));
+    return newComplexNumber(exp(re) * cos(im),
+                            exp(re) * sin(im));
+  },
+  
+  /**
+   * @this {ComplexNumber}
+   * @return {ComplexNumber}
+   */
+  sin: function () {
+    var re = this.real;
+    var im = this.imag;
+    if (!im) return realToComplex(sin(re));
+    return newComplexNumber(sin(re) * cosh(im),
+                            cos(re) * sinh(im));
+  },
+  
+  /**
+   * @this {ComplexNumber}
+   * @return {ComplexNumber}
+   */
+  cos: function () {
+    var re = this.real;
+    var im = this.imag;
+    if (!im) return realToComplex(cos(re));
+    if (!re) return realToComplex(cosh(im));
+    return newComplexNumber(cos(re) * cosh(im),
+                            sin(re) * sinh(im));
+  },
+  
+  /**
+   * @this {ComplexNumber}
+   * @return {ComplexNumber}
+   */
+  tan: function () {
+    var re = this.real;
+    var im = this.imag;
+    if (!im) return realToComplex(tan(re));
+    if (!re) return imagToComplex(tanh(im));
+    return this.sin().divide(this.cos());
+  },
+  
+  /**
+   * @this {ComplexNumber}
+   * @return {ComplexNumber}
+   */
+  log: function () {
+    if (!this.imag) return realToComplex(log(this.real));
+    return newComplexNumber(Math.log(this.abs()), this.arg());
+  },
+  
+  /**
+   * @this {ComplexNumber}
+   * @return {ComplexNumber}
+   */
+  sqrt: function () {
+    var r = this.abs();
+    var t = this.arg() / 2;
+    return newComplexNumber(r * cos(t), r * sin(t));
+  },
+  
+  /**
+   * @this {ComplexNumber}
+   * @return {ComplexNumber}
+   */
+  sinh: function () {
+    var re = this.real;
+    var im = this.imag;
+    var real = sinh(re);
+    var imag = sin(im);
+    if (!im) return realToComplex(real);
+    if (!re) return imagToComplex(imag);
+    return newComplexNumber(real * cos(im), imag * sinh(re));
+  },
+  
+  /**
+   * @this {ComplexNumber}
+   * @return {ComplexNumber}
+   */
+  cosh: function () {
+    var re = this.real;
+    var im = this.imag;
+    var real = cosh(re);
+    var imag = cos(im);
+    if (!im) return realToComplex(real);
+    if (!re) return realToComplex(imag);
+    return newComplexNumber(real * imag, sinh(re) * sin(im));
+  },
+  
+  /**
+   * @this {ComplexNumber}
+   * @return {ComplexNumber}
+   */
+  tanh: function () {
+    if (!im) return realToComplex(tanh(real));
+    if (!this.real) return imagToComplex(tan(imag));
+    return this.sinh().divide(this.cosh());
   }
 };
+
+ComplexNumber.prototype['toString'] = ComplexNumber.prototype.toString;
+ComplexNumber.prototype['plus']     = ComplexNumber.prototype.plus;
+ComplexNumber.prototype['minus']    = ComplexNumber.prototype.minus;
+ComplexNumber.prototype['times']    = ComplexNumber.prototype.times;
+ComplexNumber.prototype['divide']   = ComplexNumber.prototype.divide;
+ComplexNumber.prototype['recip']    = ComplexNumber.prototype.recip;
+ComplexNumber.prototype['arg']      = ComplexNumber.prototype.arg;
+ComplexNumber.prototype['abs']      = ComplexNumber.prototype.abs;
+ComplexNumber.prototype['conj']     = ComplexNumber.prototype.conj;
+ComplexNumber.prototype['negate']   = ComplexNumber.prototype.negate;
+ComplexNumber.prototype['exp']      = ComplexNumber.prototype.exp;
+ComplexNumber.prototype['sin']      = ComplexNumber.prototype.sin;
+ComplexNumber.prototype['cos']      = ComplexNumber.prototype.cos;
+ComplexNumber.prototype['tan']      = ComplexNumber.prototype.tan;
+ComplexNumber.prototype['log']      = ComplexNumber.prototype.log;
+ComplexNumber.prototype['sqrt']     = ComplexNumber.prototype.sqrt;
+ComplexNumber.prototype['sinh']     = ComplexNumber.prototype.sinh;
+ComplexNumber.prototype['cosh']     = ComplexNumber.prototype.cosh;
+ComplexNumber.prototype['tanh']     = ComplexNumber.prototype.tanh;
 
 ComplexNumber['realToComplex'] = realToComplex;
 ComplexNumber['imagToComplex'] = imagToComplex;
 
 global['ComplexNumber'] = ComplexNumber;
 
+// This class is immutable.
+freeze(global['ComplexNumber']);
 })(this);
