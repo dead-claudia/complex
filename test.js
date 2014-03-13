@@ -25,5 +25,5 @@ foo[21] = test.sqrt();
 foo[22] = test.sinh();
 foo[23] = test.cosh();
 foo[24] = test.tanh();
-foo[12] = ComplexNumebr.realToComplex(1);
-foo[12] = ComplexNumber.imagToComplex(2);
+foo[25] = ComplexNumebr.realToComplex(1);
+foo[26] = ComplexNumber.imagToComplex(2);
