@@ -5,10 +5,8 @@ Complex number implementation in Javascript
 
 The source is in complex.js, and the latest stable minified
 version is in complex.min.js. The minified library is built
-using the Closure Compiler.
-
-This code is licensed with the GNU GPL v3 or later. Preference
-goes to the license.
+using the Closure Compiler. This project is licensed with the
+GNU GPL v3 or later.
 
 **NOTE:** The file complex.es6.js is written in ECMAScript 6,
 and is not meant for standard use currently.
