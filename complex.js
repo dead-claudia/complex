@@ -227,8 +227,8 @@ function _times(a, b) {
     return newComplexNumber(a.real * b,
                             a.imag * b);
   
-  return newComplexNumber(a.real * b.real,
-                          a.imag * b.imag);
+  return newComplexNumber(a.real * b.real - a.imag * b.imag,
+                          a.imag * b.real + a.real * b.imag);
 };
 
 /**
