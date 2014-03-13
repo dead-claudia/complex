@@ -223,7 +223,7 @@ function _minus(a, b) {
  * @return {ComplexNumber}
  */
 function _times(a, b) {
-  if (isNumber(numTwo))
+  if (isNumber(b))
     return newComplexNumber(a.real * b,
                             a.imag * b);
   
@@ -237,7 +237,7 @@ function _times(a, b) {
  * @return {ComplexNumber}
  */
 function _divide(a, b) {
-  if (isNumber(num)) {
+  if (isNumber(b)) {
     return newComplexNumber(a.real / b,
                             a.imag / b);
   }
@@ -258,8 +258,8 @@ function _arg(a) {
  * @return {number}
  */
 function _abs(a) {
-  var re = this.real;
-  var im = this.imag;
+  var re = a.real;
+  var im = a.imag;
   if (!im) return abs(re);
   if (!re) return abs(im);
   return hypot(im, re);
