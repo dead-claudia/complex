@@ -29,12 +29,11 @@ function freeze(obj) {
   Object.freeze(obj);
   for (propKey in obj) {
     prop = obj[propKey];
-    if (!obj.hasOwnProperty(propKey) ||
-        !(typeof prop === "object")  ||
-        Object.isFrozen(prop)) {
-      continue;
+    if (obj.hasOwnProperty(propKey) &&
+        typeof prop === "object" &&
+        !Object.isFrozen(prop)) {
+      freeze(prop);
     }
-    freeze(prop);
   }
 }
 
