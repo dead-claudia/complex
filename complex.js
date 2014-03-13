@@ -28,9 +28,8 @@ function freeze(obj) {
   var prop, propKey;
   Object.freeze(obj);
   for (propKey in obj) {
-    prop = obj[propKey];
     if (obj.hasOwnProperty(propKey) &&
-        typeof prop === "object" &&
+        typeof (prop = obj[propkey]) === "object" &&
         !Object.isFrozen(prop)) {
       freeze(prop);
     }
