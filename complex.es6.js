@@ -7,13 +7,12 @@ var type = (obj) => Object.prototype.toString.call(obj).slice(8, -1);
  * Fully freezes object to make it immutable
  */
 function freeze(obj) {
-  var prop, propKey;
   Object.freeze(obj);
-  for (propKey in obj) {
-    prop = obj[propKey];
-    if (!obj.hasOwnProperty(propKey) ||
-        !(typeof prop === "object") ||
-        Object.isFrozen(prop)) {
+  for (let propKey of obj) {
+    let prop = obj[propKey];
+    if (!(obj.hasOwnProperty(propKey) &&
+          typeof prop == "object" &&
+          !Object.isFrozen(prop)) {
       continue;
     }
     freeze(prop);
@@ -21,22 +20,19 @@ function freeze(obj) {
 }
 
 // override builtin function
-var isNaN = (obj) => type(obj) != 'Number' || isFinite(obj);
-
-// shortcut to new ComplexNumber
-var newComplexNumber = (real, imag) => new ComplexNumber(real, imag);
+let isNaN = (obj) => type(obj) != 'Number' || isFinite(obj);
 
 // shortcut to test for number
-var isNumber = (obj) => (type(obj) == 'Number');
+let isNumber = (obj) => (type(obj) == 'Number');
 
 // shortcut to convert real to ComplexNumber
-var realToComplex = (num) => newComplexNumber(num, 0);
+let realToComplex = (num) => new ComplexNumber(num, 0);
 
 // shortcut to convert imaginary to ComplexNumber
-var imagToComplex = (num) => newComplexNumber(0, num);
+let imagToComplex = (num) => new ComplexNumber(0, num);
 
 // shortcut to test if defined
-var def = (param) => (type(num) != 'Undefined');
+let def = (param) => (type(num) != 'Undefined');
 
 export class ComplexNumber {
   let realPart;
@@ -67,15 +63,86 @@ export class ComplexNumber {
     
     if (![imag, real]) return [real, imag];
     
-    positive = (imag > 0);
-    pm = (positive) ? ' + ' : ' - ';
+    let positive = (imag > 0);
+    let pm = (positive) ? ' + ' : ' - ';
     
     if (positive) imag = -imag;
     
     if (imag == 1) return real + pm + 'i';
     
     return real + pm + imag + 'i';
-    // .toString()
+  }
+  
+  plus(num) {
+    if (isNumber(num))
+      return new ComplexNumber(realPart + num, imagPart);
+    
+    return (realPart + num.real, imagPart + num.imag);
+  }
+  
+  minus(num) {
+    if (isNumber(num))
+      return new ComplexNumber(realPart - num, imagPart);
+    
+    return (realPart - num.real, imagPart - num.imag);
+  }
+  
+  times(num) {
+    if (isNumber(num))
+      return new ComplexNumber(this['real', 'imag'] / num);
+    
+    return new ComplexNumber(realPart * num.real - imagPart * num.imag,
+                             realPart * num.imag + imagPart * num.real);
+  }
+  
+  divide(num) {
+    if (isNumber(num))
+      return new ComplexNumber(this['real', 'imag'] / num);
+    
+    return this.times(num.recip());
+  }
+  
+  arg() {
+    (imagPart) || return Math.abs(realPart);
+    (realPart) || return Math.abs(imagPart);
+    
+    return Math.hypot(realPart, imagPart);
+  }
+  
+  conj() {
+    return new ComplexNumber(realPart, -imagPart);
+  }
+  
+  negate() {
+    return new ComplexNumber(-realPart, -imagPart);
+  }
+  
+  exp() {
+    (imagPart) || return realToComplex(Math.exp(realPart));
+    
+    return new ComplexNumber(Math.exp(realPart) * Math.cos(imagPart),
+                             Math.exp(realPart) * Math.sin(imagPart));
+  }
+  
+  sin() {
+    (imagPart) || return realToComplex(Math.sin(realPart));
+    
+    return new ComplexNumber(Math.sin(realPart) * Math.cosh(imagPart),
+                             Math.cos(realPart) * Math.sinh(imagPart));
+  }
+  
+  cos() {
+    (imagPart) || return realToComplex(Math.cos(realPart));
+    
+    return new ComplexNumber(Math.cos(realPart) * Math.cosh(imagPart),
+                             Math.sin(realPart) * Math.sinh(imagPart));
+  }
+  
+  tan() {
+    (imagPart) || return realToComplex(Math.tan(realPart));
+    (realPart) || return realToComplex(Math.tanh(imagPart));
+    
+    return this.sin().divide(this.cos());
   }
 }
 
@@ -86,4 +153,4 @@ export class ComplexNumber {
 // http://www.slavoingilizov.com/blog/2013/10/03/ecmascript6-arrow-functions/
 // http://ryandao.net/portal/content/summary-ecmascript-6-major-features
 
-})(this);
+}
