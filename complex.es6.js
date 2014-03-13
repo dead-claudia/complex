@@ -39,8 +39,8 @@ var imagToComplex = (num) => newComplexNumber(0, num);
 var def = (param) => (type(num) != 'Undefined');
 
 class ComplexNumber {
-  private realPart;
-  private imagPart;
+  let realPart;
+  let imagPart;
   
   public const length = 2;
   
