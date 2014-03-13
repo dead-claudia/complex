@@ -1,4 +1,4 @@
-(function (global) {
+module "ComplexNumber" {
 
 // removes excess from Object.prototype.toString.call();
 var type = (obj) => Object.prototype.toString.call(obj).slice(8, -1);
@@ -38,7 +38,7 @@ var imagToComplex = (num) => newComplexNumber(0, num);
 // shortcut to test if defined
 var def = (param) => (type(num) != 'Undefined');
 
-class ComplexNumber {
+export class ComplexNumber {
   let realPart;
   let imagPart;
   
@@ -59,6 +59,22 @@ class ComplexNumber {
   }
   
   toString() {
+    let [real, imag] = [realPart, imagPart];
+    
+    if (isNaN([real, imag])) return 'NaN';
+    
+    if (!isFinite([real, imag])) return 'Infinity';
+    
+    if (![imag, real]) return [real, imag];
+    
+    positive = (imag > 0);
+    pm = (positive) ? ' + ' : ' - ';
+    
+    if (positive) imag = -imag;
+    
+    if (imag == 1) return real + pm + 'i';
+    
+    return real + pm + imag + 'i';
     // .toString()
   }
 }
