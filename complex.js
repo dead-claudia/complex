@@ -34,7 +34,7 @@ function freeze(obj) {
         Object.isFrozen(prop)) {
       continue;
     }
-    deepFreeze(prop);
+    freeze(prop);
   }
 }
 
