@@ -4,15 +4,14 @@ Complex.js
 Complex number implementation in Javascript
 
 The source is in complex.js, and the latest stable minified
-source will be in complex.min.js once ready.
-
-The minified source will is built using the Closure Compiler.
+version is in complex.min.js. The minified library is built
+using the Closure Compiler.
 
 This code is licensed with the GNU GPL v3 or later. Preference
-goes to the licensee.
+goes to the license.
 
-<strong>NOTE: The file complex.es6.js is written in ECMAScript 6,
-and is not the version meant for standard use.</strong>
+**NOTE:** The file complex.es6.js is written in ECMAScript 6,
+and is not meant for standard use currently.
 
 -----
 
