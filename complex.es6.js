@@ -50,11 +50,11 @@ class ComplexNumber {
     imagPart = imaginary;
   }
   
-  real() {
+  get real() {
     return realPart;
   }
   
-  imag() {
+  get imag() {
     return imagPart;
   }
   
