@@ -362,7 +362,7 @@ function _sinh(a) {
   var imag = sin(im);
   if (!im) return realToComplex(real);
   if (!re) return imagToComplex(imag);
-  return newComplexNumber(real * cos(im), imag * sinh(re));
+  return newComplexNumber(real * cos(im), imag * cosh(re));
 };
 
 /**
