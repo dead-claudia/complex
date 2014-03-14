@@ -333,8 +333,9 @@ function _tan(a) {
  * @return {ComplexNumber}
  */
 function _log(a) {
+  var log = Math.log;
   if (!a.imag) return realToComplex(log(a.real));
-  return newComplexNumber(Math.log(_abs(a)), _arg(a));
+  return newComplexNumber(log(_abs(a)), _arg(a));
 };
 
 /**
@@ -380,8 +381,10 @@ function _cosh(a) {
  * @return {ComplexNumber}
  */
 function _tanh(a) {
-  if (!im) return realToComplex(tanh(real));
-  if (!a.real) return imagToComplex(tan(imag));
+  var re = a.real;
+  var im = a.imag;
+  if (!im) return realToComplex(tanh(re));
+  if (!re) return imagToComplex(tan(im));
   return _divide(_sinh(a), _cosh(a));
 }
 
