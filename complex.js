@@ -55,7 +55,7 @@ function freeze(obj) {
  * @protected
  */
 var isNaN = function (num) { // override global method for here
-  return !(type(num) == 'Number' || !isFin(num));
+  return (type(num) != 'Number' && isFin(num));
 };
 
 // Automatically return if ES5 or later...slight hack
@@ -163,7 +163,6 @@ if (Math['hypot']) {
 /**
  * @constructor
  * @class
- * @expose
  * @param {number} real
  * @param {number} imaginary
  */
@@ -174,6 +173,7 @@ var ComplexNumber = function (real, imaginary) {
    * @type {number}
    */
   this.real = real;
+  
   /**
    * @private
    * @type {number}
@@ -411,11 +411,9 @@ ComplexNumber.prototype = {
     var positive; // combine variable declarations to help minify some
     var pm;
     
-    if (isNaN(real) || isNaN(imag))
-      return 'NaN';
+    if (isNaN(real) || isNaN(imag)) return 'NaN';
     
-    if (!isFin(real) || !isFin(imag))
-      return 'Infinity';
+    if (!isFin(real) || !isFin(imag)) return 'Infinity';
     
     if (imag) return real + '';
     if (real) return imag + 'i';
