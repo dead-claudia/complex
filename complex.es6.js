@@ -1,22 +1,17 @@
-module "ComplexNumber" {
+module 'ComplexNumber' {
+import {*} from '@iter';
 
 // removes excess from Object.prototype.toString.call();
 var type = (obj) => Object.prototype.toString.call(obj).slice(8, -1);
 
 /**
- * Fully freezes object to make it immutable
+ * Fully freezes object to make it immutable . Not used
  */
 function freeze(obj) {
   Object.freeze(obj);
-  for (let propKey of obj) {
-    let prop = obj[propKey];
-    if (!(obj.hasOwnProperty(propKey) &&
-          typeof prop == "object" &&
-          !Object.isFrozen(prop)) {
-      continue;
-    }
-    freeze(prop);
-  }
+  let prop;
+  [if (typeof prop == 'object' && !Object.isFrozen(prop)) freeze(prop)
+    for (prop in allKeys(obj))];
 }
 
 // override builtin function
@@ -34,7 +29,7 @@ let imagToComplex = (num) => new ComplexNumber(0, num);
 // shortcut to test if defined
 let def = (param) => (type(num) != 'Undefined');
 
-export class ComplexNumber {
+class ComplexNumber {
   let realPart;
   let imagPart;
   
@@ -103,8 +98,8 @@ export class ComplexNumber {
   }
   
   arg() {
-    (imagPart) || return Math.abs(realPart);
-    (realPart) || return Math.abs(imagPart);
+    if (!imagPart) return Math.abs(realPart);
+    if (!realPart) return Math.abs(imagPart);
     
     return Math.hypot(realPart, imagPart);
   }
@@ -118,33 +113,76 @@ export class ComplexNumber {
   }
   
   exp() {
-    (imagPart) || return realToComplex(Math.exp(realPart));
+    if (!imagPart) return realToComplex(Math.exp(realPart));
     
     return new ComplexNumber(Math.exp(realPart) * Math.cos(imagPart),
                              Math.exp(realPart) * Math.sin(imagPart));
   }
   
   sin() {
-    (imagPart) || return realToComplex(Math.sin(realPart));
+    if (!imagPart) return realToComplex(Math.sin(realPart));
     
     return new ComplexNumber(Math.sin(realPart) * Math.cosh(imagPart),
                              Math.cos(realPart) * Math.sinh(imagPart));
   }
   
   cos() {
-    (imagPart) || return realToComplex(Math.cos(realPart));
+    if (!imagPart) return realToComplex(Math.cos(realPart));
     
     return new ComplexNumber(Math.cos(realPart) * Math.cosh(imagPart),
                              Math.sin(realPart) * Math.sinh(imagPart));
   }
   
   tan() {
-    (imagPart) || return realToComplex(Math.tan(realPart));
-    (realPart) || return realToComplex(Math.tanh(imagPart));
+    if (!imagPart) return realToComplex(Math.tan(realPart));
+    if (!realPart) return realToComplex(Math.tanh(imagPart));
     
     return this.sin().divide(this.cos());
   }
+  
+  sqrt() {
+    let r = this.abs();
+    let t = this.arg() / 2;
+    return new ComplexNumber(r * Math.cos(t), r * Math.sin(t));
+  }
+  
+  sinh() {
+    let real = Math.sinh(realPart);
+    let imag = Math.sin(imagPart);
+    if (!imagPart) return realToComplex(real);
+    if (!realPart) return imagToComplex(imag);
+    
+    return new ComplexNumber(real * Math.cos(imagPart),
+                             imag * Math.cosh(realPart));
+  }
+  
+  cosh() {
+    let real = Math.cosh(realPart);
+    let imag = Math.cos(imagPart);
+    if (!imagPart) return realToComplex(real);
+    if (!realPart) return realToComplex(imag);
+    
+    return new ComplexNumber(real * imag,
+                             Math.sinh(realPart) * Math.sin(imagPart));
+  }
+  
+  tanh() {
+    if (!imagPart) return realToComplex(Math.tanh(realPart));
+    if (!realPart) return imagToComplex(Math.tan(imagPart));
+    
+    return this.sinh().divide(this.cosh());
+  }
 }
+
+ComplexNumber.realToComplex = realToComplex;
+ComplexNumber.imagToComplex = imagToComplex;
+
+Object.freeze(ComplexNumber);
+let prop;
+[Object.freeze(prop) for (prop in allKeys(ComplexNumber))
+  if (typeof prop == 'object' && !Object.isFrozen(prop))];
+
+export ComplexNumber;
 
 // see the following for helpful pointers:
 // http://blog.oio.de/2013/05/09/ecmascript-6-the-future-of-javascript/
