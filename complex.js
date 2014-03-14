@@ -1,14 +1,28 @@
-/** @preserve
- * Complex.js
+/**
+ * @preserve Complex.js
  * Copyright Isiah Meadows
  * Licensed under GNU GPL v3 or later
  */
 
 (function (global) {
 
-/* Helper functions and aliases to help minify code */
+/**************************************/
+/* Helper aliases to help minify code */
+/**************************************/
 
 /** @protected */ var isFin = isFinite;
+/** @protected */ var abs  = Math['abs'];
+/** @protected */ var sin  = Math['sin'];
+/** @protected */ var cos  = Math['cos'];
+/** @protected */ var tan  = Math['tan'];
+/** @protected */ var exp  = Math['exp'];
+/** @protected */ var pow  = Math['pow'];
+/** @protected */ var sqrt = Math['sqrt'];
+/** @protected */ var pi   = Math['PI'];
+
+/***********************************/
+/* Helper functions to minify code */
+/***********************************/
 
 /**
  * removes excess from Object.prototype.toString.call();
@@ -44,10 +58,8 @@ var isNaN = function (num) { // override global method for here
   return !(type(num) == 'Number' || !isFin(num));
 };
 
-// Automatically return if not ES5 or later...slight hack
+// Automatically return if ES5 or later...slight hack
 if (type(null) != 'Null') return;
-
-/* Helper functions */
 
 /**
  * @param {number} real
@@ -92,15 +104,6 @@ var imagToComplex = function (num) {
 var def = function (num) {
   return (type(num) != 'Undefined')
 };
-
-/** @protected */ var abs  = Math['abs'];
-/** @protected */ var sin  = Math['sin'];
-/** @protected */ var cos  = Math['cos'];
-/** @protected */ var tan  = Math['tan'];
-/** @protected */ var exp  = Math['exp'];
-/** @protected */ var pow  = Math['pow'];
-/** @protected */ var sqrt = Math['sqrt'];
-/** @protected */ var pi   = Math['PI'];
 
 /* define methods if they aren't already defined in the Math object */
 if (Math['sinh']) {
