@@ -56,7 +56,7 @@ class ComplexNumber {
     
     if (!isFinite([real, imag])) return 'Infinity';
     
-    if (![imag, real]) return [real, imag];
+    if (![imag, real]) return '0';
     
     let positive = (imag > 0);
     let pm = (positive) ? ' + ' : ' - ';
