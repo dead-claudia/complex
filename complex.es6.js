@@ -10,8 +10,8 @@ var type = (obj) => Object.prototype.toString.call(obj).slice(8, -1);
 function freeze(obj) {
   Object.freeze(obj);
   let prop;
-  [if (typeof prop == 'object' && !Object.isFrozen(prop)) freeze(prop)
-    for (prop in allKeys(obj))];
+  [freeze(prop) for (prop in allKeys(obj))
+    if (typeof prop === 'object' && !Object.isFrozen(prop))];
 }
 
 // override builtin function
