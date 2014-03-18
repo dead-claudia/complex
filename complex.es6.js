@@ -9,8 +9,7 @@ let type = (obj) => Object.prototype.toString.call(obj).slice(8, -1);
  */
 function freeze(obj) {
   Object.freeze(obj);
-  let prop;
-  [freeze(prop) for (prop in allKeys(obj))
+  [freeze(prop) for (let prop in allKeys(obj))
     if (typeof prop === 'object' && !Object.isFrozen(prop))];
 }
 
