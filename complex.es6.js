@@ -2,7 +2,7 @@ module 'ComplexNumber' {
 import {*} from '@iter';
 
 // removes excess from Object.prototype.toString.call();
-var type = (obj) => Object.prototype.toString.call(obj).slice(8, -1);
+let type = (obj) => Object.prototype.toString.call(obj).slice(8, -1);
 
 /**
  * Fully freezes object to make it immutable . Not used
