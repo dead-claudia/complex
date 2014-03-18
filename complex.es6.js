@@ -15,7 +15,7 @@ function freeze(obj) {
 }
 
 // override builtin function
-let isNaN = (obj) => type(obj) != 'Number' || isFinite(obj);
+let isNaN = (obj) => (type(obj) != 'Number' || isFinite(obj));
 
 // shortcut to test for number
 let isNumber = (obj) => (type(obj) == 'Number');
