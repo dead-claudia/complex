@@ -1,5 +1,5 @@
 module 'ComplexNumber' {
-import {*} from '@iter';
+import {allKeys} from '@iter';
 
 // removes excess from Object.prototype.toString.call();
 let type = (obj) => Object.prototype.toString.call(obj).slice(8, -1);
