@@ -35,7 +35,7 @@ class ComplexNumber {
   public const length = 2;
   
   // constructor
-  constructor(real, imaginary) {
+  new(real, imaginary) {
     realPart = real;
     imagPart = imaginary;
   }
