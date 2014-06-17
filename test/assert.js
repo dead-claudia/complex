@@ -52,4 +52,4 @@ exports.assert = function (found, req, reqType, fn) {
     assertNum('real', found.real, req.real, fn);
     assertNum('imag', found.imag, req.imag, fn);
   }
-}
+};
