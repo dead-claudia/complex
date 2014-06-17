@@ -748,11 +748,11 @@ ComplexNumber = mixin(ComplexNumber, { /** @lends ComplexNumber */
    * @desc Add two numbers, both either being of type Number or ComplexNumber
    * @param {(ComplexNumber|number)} num1 - a (possibly complex) number
    * @param {(ComplexNumber|number)} num2 - a (possibly complex) number
-   * @return {(ComplexNumber|number)} - the resulting (possibly complex) number
+   * @return {ComplexNumber} - the resulting number
    */
   'plus': function (num1, num2) {
     if (isNumber(num2)) {
-      return isNumber(num1) ? num1 + num2 : toComplex([num2.real + num1, num2.imag]);
+      return isNumber(num1) ? realToComplex(num1 + num2) : toComplex([num2.real + num1, num2.imag]);
     } else {
       return num1.plus(num2);
     }
@@ -763,11 +763,11 @@ ComplexNumber = mixin(ComplexNumber, { /** @lends ComplexNumber */
    * @desc Subtract the second number from the first, both being possibly complex.
    * @param {(ComplexNumber|number)} num1 - a (possibly complex) number
    * @param {(ComplexNumber|number)} num2 - a (possibly complex) number
-   * @return {(ComplexNumber|number)} - the resulting (possibly complex) number
+   * @return {ComplexNumber} - the resulting number
    */
   'minus': function (num1, num2) {
     if (isNumber(num2))
-      return isNumber(num1) ? num1 - num2 : toComplex([num2.real - num1, num1.imag]);
+      return isNumber(num1) ? realToComplex(num1 - num2) : toComplex([num2.real - num1, num1.imag]);
     } else {
       return num1.minus(num2);
     }
@@ -778,11 +778,11 @@ ComplexNumber = mixin(ComplexNumber, { /** @lends ComplexNumber */
    * @desc Multiply two numbers, both either being of type Number or ComplexNumber
    * @param {(ComplexNumber|number)} num1 - a (possibly complex) number
    * @param {(ComplexNumber|number)} num2 - a (possibly complex) number
-   * @return {(ComplexNumber|number)} - the resulting (possibly complex) number
+   * @return {ComplexNumber} - the resulting number
    */
   'times': function (num1, num2) {
     if (isNumber(num2)) {
-      return isNumber(num1) ? num1 * num2 : toComplex([num1.real * num2, num1.imag * num2]);
+      return isNumber(num1) ? realToComplex(num1 * num2) : toComplex([num1.real * num2, num1.imag * num2]);
     } else {
       return num1.times(num2);
     }
@@ -793,11 +793,11 @@ ComplexNumber = mixin(ComplexNumber, { /** @lends ComplexNumber */
    * @desc Divide the second number from the first, both being possibly complex.
    * @param {(ComplexNumber|number)} num1 - a (possibly complex) number
    * @param {(ComplexNumber|number)} num2 - a (possibly complex) number
-   * @return {(ComplexNumber|number)} - the resulting (possibly complex) number
+   * @return {ComplexNumber} - the resulting number
    */
   'divide': function (num1, num2) {
     if (isNumber(num2)) {
-      return isNumber(num1) ? num1 / num2 : toComplex([num1.real / num2, num1.imag / num2]);
+      return isNumber(num1) ? realTComplex(num1 / num2) : toComplex([num1.real / num2, num1.imag / num2]);
     } else {
       return num1.divide(num2);
     }
@@ -807,22 +807,22 @@ ComplexNumber = mixin(ComplexNumber, { /** @lends ComplexNumber */
    * @method
    * @desc Return the reciprocal of a (possibly complex) number
    * @param {(ComplexNumber|number)} num - a (possibly complex) number
-   * @return {(ComplexNumber|number)} - the resulting number
+   * @return {ComplexNumber} - the resulting number
    */
   'recip': function (num) {
-    return isNumber(num) ? 1 / num : num1.recip();
+    return isNumber(num) ? realToComplex(1 / num) : num1.recip();
   },
   
   /**
    * @method
    * @desc Return the angle/argument of a (possibly complex) number
    * @param {(ComplexNumber|number)} num - a (possibly complex) number
-   * @return {(ComplexNumber|number)} - the resulting number
+   * @return {ComplexNumber} - the resulting number
    */
   'arg': function (num) {
     if (isNumber(num)) {
-      if (isNan(num) || num === 0) return NaN;
-      return num > 0 ? 0 : pi;
+      if (isNan(num) || num === 0) return realToComplex(NaN);
+      return realToComplex(num > 0 ? 0 : pi);
     } else {
       return num.arg();
     }
@@ -832,10 +832,10 @@ ComplexNumber = mixin(ComplexNumber, { /** @lends ComplexNumber */
    * @method
    * @desc Return the absolute value/modulus of a (possibly complex) number
    * @param {(ComplexNumber|number)} num - a (possibly complex) number
-   * @return {(ComplexNumber|number)} - the resulting number
+   * @return {ComplexNumber} - the resulting number
    */
   'abs': function (num) {
-    return isNumber(num) ? abs(num) : num.abs();
+    return isNumber(num) ? realToComplex(abs(num)) : num.abs();
   },
   
   /**
@@ -845,107 +845,113 @@ ComplexNumber = mixin(ComplexNumber, { /** @lends ComplexNumber */
    * @return {(ComplexNumber|number)} - the resulting number
    */
   'conj': function (num) {
-    return isNumber(num) ? num : num.conj();
+    return isNumber(num) ? realToComplex(num) : num.conj();
   },
   
   /**
    * @method
    * @desc Return the additive inverse of a (possibly complex) number
    * @param {(ComplexNumber|number)} num - a (possibly complex) number
-   * @return {(ComplexNumber|number)} - the resulting number
+   * @return {ComplexNumber} - the resulting number
    */
   'negate': function (num) {
-    return isNumber(num) ? -num : num.negate();
+    return isNumber(num) ? realToComplex(-num) : num.negate();
   },
   
   /**
    * @method
    * @desc Return *e* raised to the power of a (possibly complex) number
    * @param {(ComplexNumber|number)} num - a (possibly complex) number
-   * @return {(ComplexNumber|number)} - the resulting number
+   * @return {ComplexNumber} - the resulting number
    */
   'exp': function (num) {
-    return isNumber(num) ? exp(num) : num.exp();
+    return isNumber(num) ? realToComplex(exp(num)) : num.exp();
   },
   
   /**
    * @method
    * @desc Return the sine of a (possibly complex) number
    * @param {(ComplexNumber|number)} num - a (possibly complex) number
-   * @return {(ComplexNumber|number)} - the resulting number
+   * @return {ComplexNumber} - the resulting number
    */
   'sin': function (num) {
-    return isNumber(num) ? sin(num) : num.sin();
+    return isNumber(num) ? realToComplex(sin(num)) : num.sin();
   },
   
   /**
    * @method
    * @desc Return the cosine of a (possibly complex) number
    * @param {(ComplexNumber|number)} num - a (possibly complex) number
-   * @return {(ComplexNumber|number)} - the resulting number
+   * @return {ComplexNumber} - the resulting number
    */
   'cos': function (num) {
-    return isNumber(num) ? cos(num) : num.cos();
+    return isNumber(num) ? realToComplex(cos(num)) : num.cos();
   },
   
   /**
    * @method
    * @desc Return the tangent of a (possibly complex) number
    * @param {(ComplexNumber|number)} num - a (possibly complex) number
-   * @return {(ComplexNumber|number)} - the resulting number
+   * @return {ComplexNumber} - the resulting number
    */
   'tan': function (num) {
-    return isNumber(num) ? tan(num) : num.tan();
+    return isNumber(num) ? realToComplex(tan(num)) : num.tan();
   },
   
   /**
    * @method
    * @desc Return the natural logarithm of a (possibly complex) number
    * @param {(ComplexNumber|number)} num - a (possibly complex) number
-   * @return {(ComplexNumber|number)} - the resulting number
+   * @return {ComplexNumber} - the resulting number
    */
   'log': function (num) {
-    return isNumber(num) ? log(num) : num.log();
+    return isNumber(num) ? realToComplex(log(num)) : num.log();
   },
   
   /**
    * @method
    * @desc Return the square root of a (possibly complex) number
    * @param {(ComplexNumber|number)} num - a (possibly complex) number
-   * @return {(ComplexNumber|number)} - the resulting number
+   * @return {ComplexNumber} - the resulting number
    */
   'sqrt': function (num) {
-    return isNumber(num) ? sqrt(num) : num.sqrt();
+    if (isNumber(num)) {
+      return num >= 0 ?
+        realToComplex(sqrt(num)) :
+        imagToComplex(sqrt(-num));
+    } else {
+      return num.sqrt();
+    }
   },
   
   /**
    * @method
    * @desc Return the hyperbolic sine of a (possibly complex) number
    * @param {(ComplexNumber|number)} num - a (possibly complex) number
-   * @return {(ComplexNumber|number)} - the resulting number
+   * @return {ComplexNumber} - the resulting number
    */
   'sinh': function (num) {
-    return isNumber(num) ? sinh(num) : num.sinh();
+    return isNumber(num) ? realToComplex(sinh(num)) : num.sinh();
   },
   
   /**
    * @method
    * @desc Return the hyperbolic cosine of a (possibly complex) number
    * @param {(ComplexNumber|number)} num - a (possibly complex) number
-   * @return {(ComplexNumber|number)} - the resulting number
+   * @return {ComplexNumber} - the resulting number
    */
   'cosh': function (num) {
-    return isNumber(num) ? cosh(num) : num.cosh();
+    return isNumber(num) ? realToComplex(cosh(num)) : num.cosh();
   },
   
   /**
    * @method
    * @desc Return the hyperbolic tangent of a (possibly complex) number
    * @param {(ComplexNumber|number)} num - a (possibly complex) number
-   * @return {(ComplexNumber|number)} - the resulting number
+   * @return {ComplexNumber} - the resulting number
    */
   'tanh': function (num) {
-    return isNumber(num) ? tanh(num) : num.tanh();
+    return isNumber(num) ? realToComplex(tanh(num)) : num.tanh();
   }
 });
 
