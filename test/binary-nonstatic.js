@@ -134,19 +134,6 @@ assert(imagInst.minus(0),
        imagInst,
        'ComplexNumber');
 
-/*
-var compInst = new ComplexNumber(1, 2);
-var realInst = new ComplexNumber(1, 0);
-var imagInst = new ComplexNumber(0, 2);
-var zeroInst = new ComplexNumber(0, 0);
-
-var testNumber   = 2;
-var testReal     = new ComplexNumber(1, 0);
-var testImag     = new ComplexNumber(0, 1);
-var testComp     = new ComplexNumber(3, 2);
-var testCompZero = new ComplexNumber(0, 0);
-*/
-
 /************/
 /* .times() */
 /************/
