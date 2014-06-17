@@ -63,7 +63,7 @@ function freeze(obj) {
  */
 function mixin(parent, children) {
   for (var i in children) {
-    Object.defineProperty(parent, i, children[i]);
+    Object.defineProperty(parent, i, { value: children[i] });
   }
   return parent;
 }
