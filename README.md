@@ -3,20 +3,22 @@ Complex.js
 
 Complex number implementation in Javascript
 
-The source is in complex.js, and the latest stable minified
-version is in complex.min.js. The minified library is built
-using the Closure Compiler. This project is licensed with the
-GNU GPL v3 or later.
+The source is in complex.js, and the latest stable minified version is in
+complex.min.js when available. The minified library is built using the Closure
+Compiler. This project is licensed with the GNU GPL v3 or later.
 
-Please file any bugs you find in the issue tracker, and if you
-have a patch for a bug, go ahead and send me a pull request.
+Please file any bugs you find in the issue tracker, and if you have a patch
+for a bug, go ahead and send me a pull request.
 
-**NOTE:** The file complex.es6.js is written in ECMAScript 6,
-and is not meant for standard use currently.
+**NOTE:** The file complex.es6.js is written in ECMAScript 6, and is not meant
+for standard use currently.
 
 -----
 
 ## Documentation ##
+
+**NOTE:** This is out-of-date. The updated documentation will be added to the
+*doc* directory.
 
 ### Key: ###
 

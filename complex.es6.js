@@ -1,3 +1,4 @@
+/* jshint ignore:start */
 module 'ComplexNumber' {
 import {allKeys} from '@iter';
 
@@ -9,11 +10,11 @@ let type = (obj) => Object.prototype.toString.call(obj).slice(8, -1);
  */
 function freeze(obj) {
   Object.freeze(obj);
-  [freeze(prop) for (let prop in allKeys(obj))
+  [freeze(prop) for (let prop of allKeys(obj))
     if (typeof prop === 'object' && !Object.isFrozen(prop))];
 }
 
-// override builtin function
+// redefine isNaN
 let isNaN = (obj) => (type(obj) != 'Number' || isFinite(obj));
 
 // shortcut to test for number
@@ -29,23 +30,9 @@ let imagToComplex = (num) => new ComplexNumber(0, num);
 let def = (param) => (type(num) != 'Undefined');
 
 class ComplexNumber {
-  let realPart;
-  let imagPart;
-  
-  public const length = 2;
-  
-  // constructor
-  new(real, imaginary) {
-    realPart = real;
-    imagPart = imaginary;
-  }
-  
-  get real() {
-    return realPart;
-  }
-  
-  get imag() {
-    return imagPart;
+  constructor(real, imaginary) {
+    Object.defineProperty(this, 'real', {value: real});
+    Object.defineProperty(this, 'imag', {value: imaginary});
   }
   
   toString() {
@@ -171,6 +158,14 @@ class ComplexNumber {
     
     return this.sinh().divide(this.cosh());
   }
+  
+  static realToComplex(num) {
+    return realToComplex(num);
+  }
+  
+  static imagtoComplex(num) {
+    return imagTocomplex(num);
+  }
 }
 
 ComplexNumber.realToComplex = realToComplex;
@@ -181,7 +176,7 @@ let prop;
 [Object.freeze(prop) for (prop in allKeys(ComplexNumber))
   if (typeof prop == 'object' && !Object.isFrozen(prop))];
 
-export ComplexNumber;
+export {ComplexNumber};
 
 // see the following for helpful pointers:
 // http://blog.oio.de/2013/05/09/ecmascript-6-the-future-of-javascript/
@@ -190,4 +185,5 @@ export ComplexNumber;
 // http://www.slavoingilizov.com/blog/2013/10/03/ecmascript6-arrow-functions/
 // http://ryandao.net/portal/content/summary-ecmascript-6-major-features
 
-}
+};
+/* jshint ignore:end */

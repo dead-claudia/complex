@@ -5,11 +5,12 @@
  */
 
 (function (root, mod) {
+  'use strict';
   if (typeof module === 'object' && typeof exports === 'object') return mod(exports); // CommonJS
   if (typeof define === 'object' && define.amd) return define(['exports'], mod); // AMD
   if (typeof window === 'object') return mod(window); // Browser
   return mod(root); // shell (Rhino, etc.), etc.
-)(this, function (global) {
+})(this, function (global) {
 'use strict';
 
 // require strict mode
@@ -504,8 +505,12 @@ var ComplexNumber = function (real, imaginary) {
       
       if (!isFin(re) || !isFin(im)) return 'Infinity';
       
-      if (im) return re + '';
-      if (re) return im + 'i';
+      if (!im) return re + '';
+      if (!re) {
+        if (im === 1) return 'i';
+        if (im === -1) return '-i';
+        return im + 'i';
+      }
       
       /**
        * @type {number}
@@ -715,7 +720,7 @@ var ComplexNumber = function (real, imaginary) {
     }
   }});
   return this;
-}
+};
 
 // mixin static methods
 ComplexNumber = mixin(ComplexNumber, { /** @lends ComplexNumber */
@@ -766,7 +771,7 @@ ComplexNumber = mixin(ComplexNumber, { /** @lends ComplexNumber */
    * @return {ComplexNumber} - the resulting number
    */
   'minus': function (num1, num2) {
-    if (isNumber(num2))
+    if (isNumber(num2)) {
       return isNumber(num1) ? realToComplex(num1 - num2) : toComplex([num2.real - num1, num1.imag]);
     } else {
       return num1.minus(num2);
