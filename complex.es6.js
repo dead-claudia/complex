@@ -1,8 +1,4 @@
 /* jshint esnext:true */
-module 'ComplexNumber' {
-
-// removes excess from Object.prototype.toString.call();
-let type = obj => Object.prototype.toString.call(obj).slice(8, -1);
 
 /**
  * Fully freezes object to make it immutable . Not used
@@ -13,17 +9,21 @@ function freeze(obj) {
     if (typeof prop === 'object' && !Object.isFrozen(prop))
       freeze(obj)];
 }
+
+// shortcut for getting object type
+const type = Object.prototype.toString.call;
+
 // shortcut to test for number
-const isNumber = obj => type(obj) === 'Number';
+const isNumber = obj => type(obj) === '[object Number]';
 
 // shortcut to convert real to ComplexNumber
-const realToComplex = num => new ComplexNumber(num, 0);
+const rtoc = num => new ComplexNumber(num, 0);
 
 // shortcut to convert imaginary to ComplexNumber
-const imagToComplex = num => new ComplexNumber(0, num);
+const itoc = num => new ComplexNumber(0, num);
 
 // shortcut to test if defined
-const def = param => type(num) !== 'Undefined';
+const def = param => type(num) !== '[object Undefined]';
 
 class ComplexNumber {
   constructor(real, imaginary) {
@@ -95,29 +95,29 @@ class ComplexNumber {
   }
   
   exp() {
-    if (!this.imag) return realToComplex(Math.exp(this.real));
+    if (!this.imag) return rtoc(Math.exp(this.real));
     
     return new ComplexNumber(Math.exp(this.real) * Math.cos(this.imag),
                              Math.exp(this.real) * Math.sin(this.imag));
   }
   
   sin() {
-    if (!this.imag) return realToComplex(Math.sin(this.real));
+    if (!this.imag) return rtoc(Math.sin(this.real));
     
     return new ComplexNumber(Math.sin(this.real) * Math.cosh(this.imag),
                              Math.cos(this.real) * Math.sinh(this.imag));
   }
   
   cos() {
-    if (!this.imag) return realToComplex(Math.cos(this.real));
+    if (!this.imag) return rtoc(Math.cos(this.real));
     
     return new ComplexNumber(Math.cos(this.real) * Math.cosh(this.imag),
                              Math.sin(this.real) * Math.sinh(this.imag));
   }
   
   tan() {
-    if (!this.imag) return realToComplex(Math.tan(this.real));
-    if (!this.real) return realToComplex(Math.tanh(this.imag));
+    if (!this.imag) return rtoc(Math.tan(this.real));
+    if (!this.real) return rtoc(Math.tanh(this.imag));
     
     return this.sin().divide(this.cos());
   }
@@ -131,8 +131,8 @@ class ComplexNumber {
   sinh() {
     let real = Math.sinh(this.real);
     let imag = Math.sin(this.imag);
-    if (!this.imag) return realToComplex(real);
-    if (!this.real) return imagToComplex(imag);
+    if (!this.imag) return rtoc(real);
+    if (!this.real) return itoc(imag);
     
     return new ComplexNumber(real * Math.cos(this.imag),
                              imag * Math.cosh(this.real));
@@ -141,26 +141,29 @@ class ComplexNumber {
   cosh() {
     let real = Math.cosh(this.real);
     let imag = Math.cos(this.imag);
-    if (!this.imag) return realToComplex(real);
-    if (!this.real) return realToComplex(imag);
+    if (!this.imag) return rtoc(real);
+    if (!this.real) return rtoc(imag);
     
     return new ComplexNumber(real * imag,
                              Math.sinh(this.real) * Math.sin(this.imag));
   }
   
   tanh() {
-    if (!this.imag) return realToComplex(Math.tanh(this.real));
-    if (!this.real) return imagToComplex(Math.tan(this.imag));
+    if (!this.imag) return rtoc(Math.tanh(this.real));
+    if (!this.real) return itoc(Math.tan(this.imag));
     
     return this.sinh().divide(this.cosh());
   }
+  
+  static realToComplex(num) {
+    return rtoc(num);
+  }
+  
+  static imagToComplex(num) {
+    return itoc(num);
+  }
 }
-
-ComplexNumber.realToComplex = realToComplex;
-ComplexNumber.imagToComplex = imagToComplex;
 
 freeze(ComplexNumber);
 
-export ComplexNumber;
-
-};
+export default ComplexNumber;
