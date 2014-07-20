@@ -1,15 +1,5 @@
 /* jshint esnext:true */
 
-/**
- * Fully freezes object to make it immutable . Not used
- */
-function freeze(obj) {
-  Object.freeze(obj);
-  [for (let prop Object.keys(obj))
-    if (typeof prop === 'object' && !Object.isFrozen(prop))
-      freeze(obj)];
-}
-
 // shortcut for getting object type
 const type = Object.prototype.toString.call;
 
@@ -25,7 +15,7 @@ const itoc = num => new ComplexNumber(0, num);
 // shortcut to test if defined
 const def = param => type(num) !== '[object Undefined]';
 
-class ComplexNumber {
+export default const class ComplexNumber {
   constructor(real, imaginary) {
     Object.defineProperty(this, 'real', {value: real});
     Object.defineProperty(this, 'imag', {value: imaginary});
@@ -163,7 +153,3 @@ class ComplexNumber {
     return itoc(num);
   }
 }
-
-freeze(ComplexNumber);
-
-export default ComplexNumber;
