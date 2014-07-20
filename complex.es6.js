@@ -1,33 +1,29 @@
-/* jshint ignore:start */
+/* jshint esnext:true */
 module 'ComplexNumber' {
-import {allKeys} from '@iter';
 
 // removes excess from Object.prototype.toString.call();
-let type = (obj) => Object.prototype.toString.call(obj).slice(8, -1);
+let type = obj => Object.prototype.toString.call(obj).slice(8, -1);
 
 /**
  * Fully freezes object to make it immutable . Not used
  */
 function freeze(obj) {
   Object.freeze(obj);
-  [freeze(prop) for (let prop of allKeys(obj))
-    if (typeof prop === 'object' && !Object.isFrozen(prop))];
+  [for (let prop Object.keys(obj))
+    if (typeof prop === 'object' && !Object.isFrozen(prop))
+      freeze(obj)];
 }
-
-// redefine isNaN
-let isNaN = (obj) => (type(obj) != 'Number' || isFinite(obj));
-
 // shortcut to test for number
-let isNumber = (obj) => (type(obj) == 'Number');
+const isNumber = obj => type(obj) === 'Number';
 
 // shortcut to convert real to ComplexNumber
-let realToComplex = (num) => new ComplexNumber(num, 0);
+const realToComplex = num => new ComplexNumber(num, 0);
 
 // shortcut to convert imaginary to ComplexNumber
-let imagToComplex = (num) => new ComplexNumber(0, num);
+const imagToComplex = num => new ComplexNumber(0, num);
 
 // shortcut to test if defined
-let def = (param) => (type(num) != 'Undefined');
+const def = param => type(num) !== 'Undefined';
 
 class ComplexNumber {
   constructor(real, imaginary) {
@@ -36,92 +32,92 @@ class ComplexNumber {
   }
   
   toString() {
-    let [real, imag] = [realPart, imagPart];
+    let [real, imag] = [this.real, this.imag];
     
-    if (isNaN([real, imag])) return 'NaN';
+    if (isNaN(real) || isNaN(imag)) return NaN;
     
-    if (!isFinite([real, imag])) return 'Infinity';
+    if (!isFinite(real) || !isFinite(imag)) return Infinity;
     
-    if (![imag, real]) return '0';
+    if (!imag && !real]) return '0';
     
-    let positive = (imag > 0);
-    let pm = (positive) ? ' + ' : ' - ';
+    let positive = imag > 0;
+    let pm = positive ? ' + ' : ' - ';
     
-    if (positive) imag = -imag;
+    if (!positive) imag = -imag;
     
-    if (imag == 1) return real + pm + 'i';
+    if (imag === 1) return real + pm + 'i';
     
     return real + pm + imag + 'i';
   }
   
   plus(num) {
     if (isNumber(num))
-      return new ComplexNumber(realPart + num, imagPart);
+      return new ComplexNumber(this.real + num, this.imag);
     
-    return (realPart + num.real, imagPart + num.imag);
+    return (this.real + num.real, this.imag + num.imag);
   }
   
   minus(num) {
     if (isNumber(num))
-      return new ComplexNumber(realPart - num, imagPart);
+      return new ComplexNumber(this.real - num, this.imag);
     
-    return (realPart - num.real, imagPart - num.imag);
+    return new ComplexNumber(this.real - num.real, this.imag - num.imag);
   }
   
   times(num) {
     if (isNumber(num))
-      return new ComplexNumber(this['real', 'imag'] / num);
+      return new ComplexNumber(this.real * num, this.imag * num);
     
-    return new ComplexNumber(realPart * num.real - imagPart * num.imag,
-                             realPart * num.imag + imagPart * num.real);
+    return new ComplexNumber(this.real * num.real - this.imag * num.imag,
+                             this.real * num.imag + this.imag * num.real);
   }
   
   divide(num) {
     if (isNumber(num))
-      return new ComplexNumber(this['real', 'imag'] / num);
+      return new ComplexNumber(this.real / num, this.imag / num);
     
     return this.times(num.recip());
   }
   
   arg() {
-    if (!imagPart) return Math.abs(realPart);
-    if (!realPart) return Math.abs(imagPart);
+    if (!this.imag) return Math.abs(this.real);
+    if (!this.real) return Math.abs(this.imag);
     
-    return Math.hypot(realPart, imagPart);
+    return Math.hypot(this.real, this.imag);
   }
   
   conj() {
-    return new ComplexNumber(realPart, -imagPart);
+    return new ComplexNumber(this.real, -this.imag);
   }
   
   negate() {
-    return new ComplexNumber(-realPart, -imagPart);
+    return new ComplexNumber(-this.real, -this.imag);
   }
   
   exp() {
-    if (!imagPart) return realToComplex(Math.exp(realPart));
+    if (!this.imag) return realToComplex(Math.exp(this.real));
     
-    return new ComplexNumber(Math.exp(realPart) * Math.cos(imagPart),
-                             Math.exp(realPart) * Math.sin(imagPart));
+    return new ComplexNumber(Math.exp(this.real) * Math.cos(this.imag),
+                             Math.exp(this.real) * Math.sin(this.imag));
   }
   
   sin() {
-    if (!imagPart) return realToComplex(Math.sin(realPart));
+    if (!this.imag) return realToComplex(Math.sin(this.real));
     
-    return new ComplexNumber(Math.sin(realPart) * Math.cosh(imagPart),
-                             Math.cos(realPart) * Math.sinh(imagPart));
+    return new ComplexNumber(Math.sin(this.real) * Math.cosh(this.imag),
+                             Math.cos(this.real) * Math.sinh(this.imag));
   }
   
   cos() {
-    if (!imagPart) return realToComplex(Math.cos(realPart));
+    if (!this.imag) return realToComplex(Math.cos(this.real));
     
-    return new ComplexNumber(Math.cos(realPart) * Math.cosh(imagPart),
-                             Math.sin(realPart) * Math.sinh(imagPart));
+    return new ComplexNumber(Math.cos(this.real) * Math.cosh(this.imag),
+                             Math.sin(this.real) * Math.sinh(this.imag));
   }
   
   tan() {
-    if (!imagPart) return realToComplex(Math.tan(realPart));
-    if (!realPart) return realToComplex(Math.tanh(imagPart));
+    if (!this.imag) return realToComplex(Math.tan(this.real));
+    if (!this.real) return realToComplex(Math.tanh(this.imag));
     
     return this.sin().divide(this.cos());
   }
@@ -133,57 +129,38 @@ class ComplexNumber {
   }
   
   sinh() {
-    let real = Math.sinh(realPart);
-    let imag = Math.sin(imagPart);
-    if (!imagPart) return realToComplex(real);
-    if (!realPart) return imagToComplex(imag);
+    let real = Math.sinh(this.real);
+    let imag = Math.sin(this.imag);
+    if (!this.imag) return realToComplex(real);
+    if (!this.real) return imagToComplex(imag);
     
-    return new ComplexNumber(real * Math.cos(imagPart),
-                             imag * Math.cosh(realPart));
+    return new ComplexNumber(real * Math.cos(this.imag),
+                             imag * Math.cosh(this.real));
   }
   
   cosh() {
-    let real = Math.cosh(realPart);
-    let imag = Math.cos(imagPart);
-    if (!imagPart) return realToComplex(real);
-    if (!realPart) return realToComplex(imag);
+    let real = Math.cosh(this.real);
+    let imag = Math.cos(this.imag);
+    if (!this.imag) return realToComplex(real);
+    if (!this.real) return realToComplex(imag);
     
     return new ComplexNumber(real * imag,
-                             Math.sinh(realPart) * Math.sin(imagPart));
+                             Math.sinh(this.real) * Math.sin(this.imag));
   }
   
   tanh() {
-    if (!imagPart) return realToComplex(Math.tanh(realPart));
-    if (!realPart) return imagToComplex(Math.tan(imagPart));
+    if (!this.imag) return realToComplex(Math.tanh(this.real));
+    if (!this.real) return imagToComplex(Math.tan(this.imag));
     
     return this.sinh().divide(this.cosh());
-  }
-  
-  static realToComplex(num) {
-    return realToComplex(num);
-  }
-  
-  static imagtoComplex(num) {
-    return imagTocomplex(num);
   }
 }
 
 ComplexNumber.realToComplex = realToComplex;
 ComplexNumber.imagToComplex = imagToComplex;
 
-Object.freeze(ComplexNumber);
-let prop;
-[Object.freeze(prop) for (prop in allKeys(ComplexNumber))
-  if (typeof prop == 'object' && !Object.isFrozen(prop))];
+freeze(ComplexNumber);
 
-export {ComplexNumber};
-
-// see the following for helpful pointers:
-// http://blog.oio.de/2013/05/09/ecmascript-6-the-future-of-javascript/
-// http://code.tutsplus.com/articles/use-ecmascript-6-today--net-31582
-// http://html5hub.com/10-ecmascript-6-tricks-you-can-perform-right-now/#i.1jaq7ippt4corx
-// http://www.slavoingilizov.com/blog/2013/10/03/ecmascript6-arrow-functions/
-// http://ryandao.net/portal/content/summary-ecmascript-6-major-features
+export ComplexNumber;
 
 };
-/* jshint ignore:end */
