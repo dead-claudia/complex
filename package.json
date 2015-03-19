@@ -1,5 +1,10 @@
 {
+  "main": "complex.js",
   "scripts": {
-    "test-syntax": "complex.js"
+    "test": "mocha test"
+  },
+  "devDependencies": {
+    "expect.js": "^0.3.1",
+    "mocha": "^2.2.1"
   }
 }
