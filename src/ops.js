@@ -60,7 +60,7 @@ module.exports.addComp = function (x, y) {
 // .sub
 
 module.exports.subNum = function (x, y) {
-    return F.sub(x, F(y, 0, 0, 0, 0));
+    return F.sub(x, F(y, 0, 0, 0));
 };
 
 module.exports.subComp = function (x, y) {
