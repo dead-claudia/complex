@@ -296,7 +296,7 @@ module.exports.coshComp = function (x) {
     if (real === 0) return F(Math.cos(imag), 0, 0, 0);
     return F.mul(
         F(p.cosh(real), p.sinh(real), 0, 0),
-        F(Math.cos(imag), Math.sin(imag)));
+        F(Math.cos(imag), Math.sin(imag), 0, 0));
 };
 
 // .tanh
