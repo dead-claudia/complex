@@ -29,6 +29,7 @@ function imagToComplex(num) {
 var complexNaN = new ComplexNumberBase(F.splat(NaN));
 
 function methods(enumerable, host, props) {
+    enumerable = !!enumerable;
     for (var prop in props) {
         if (Object.prototype.hasOwnProperty.call(props, prop)) {
             Object.defineProperty(host, prop, {

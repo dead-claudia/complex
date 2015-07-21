@@ -9,11 +9,11 @@ var F = SIMD.Float32x4;
 var B = SIMD.Bool32x4;
 
 var scalar0 = F.splat(0);
+var scalarNaN = F.splat(NaN);
 
 function gc(x) {
-    return F.shuffle(x, scalar0, 0, 1, 4, 4);
+    return F.shuffle(x, scalarNaN, 0, 1, 4, 4);
 }
-module.exports.gc = gc;
 
 module.exports.equal = function (a, b) {
     a = gc(a);
@@ -26,8 +26,6 @@ module.exports.equal = function (a, b) {
 function anyIsNaN(a) {
     return B.anyTrue(F.notEqual(a, a));
 }
-
-var scalarNaN = F.splat(NaN);
 
 // .real
 
@@ -110,10 +108,11 @@ module.exports.recipComp = function (x) {
 // .div
 
 module.exports.divNum = function (x, y) {
-    if (y === 0 || anyIsNaN(x = gc(x))) {
+    var divisor = F.splat(y);
+    if (anyIsNaN(F.shuffle(x, divisor, 0, 1, 4, 4))) {
         return scalarNaN;
     } else {
-        return F.div(x, F.splat(y));
+        return F.div(x, y);
     }
 };
 
@@ -122,7 +121,6 @@ function divComp(x, y) {
         return scalarNaN;
     }
 
-    y = gc(y);
     var z = F.swizzle(y, 1, 0, 0, 0);
     var check = F.equal(z, scalar0);
 
@@ -145,7 +143,7 @@ function divComp(x, y) {
         return F.div(x, F.splat(imag));
     }
 
-    x = gc(x);
+    x = F.swizzle(x, 0, 1, 0, 0);
     y = recip(y, z);
 
     if (B.anyTrue(F.equal(x, scalar0))) {
@@ -226,23 +224,17 @@ module.exports.cosComp = function (x) {
 var scalar2 = F.splat(2);
 
 module.exports.tanComp = function (x) {
-    if (anyIsNaN(x = gc(x))) {
-        return scalarNaN;
-    }
+    if (anyIsNaN(F.swizzle(x, 0, 1, 0, 0))) return scalarNaN;
 
     x = F.mul(x, scalar2);
 
     var real = F.extractLane(x, 0);
     var imag = F.extractLane(x, 1);
 
-    if (imag === 0) {
-        return F(Math.cos(real), 0, 0, 0);
-    } else if (real === 0) {
-        return F(0, p.tanh(imag), 0, 0);
-    } else {
-        var scale = F.splat(Math.cos(real) + p.cosh(imag));
-        return F.div(F(Math.sin(real), p.sinh(imag), 0, 0), scale);
-    }
+    if (imag === 0) return F(Math.cos(real), 0, 0, 0);
+    if (real === 0) return F(0, p.tanh(imag), 0, 0);
+    var scale = F.splat(Math.cos(real) + p.cosh(imag));
+    return F.div(F(Math.sin(real), p.sinh(imag), 0, 0), scale);
 };
 
 // .log
@@ -313,14 +305,9 @@ module.exports.tanhComp = function tanhComp(x) {
     var real = F.extractLane(x, 0);
     var imag = F.extractLane(x, 1);
 
-    if (real !== real || imag !== imag) {
-        return scalarNaN;
-    } else if (imag === 0) {
-        return F(p.cosh(real), 0, 0, 0);
-    } else if (real === 0) {
-        return F(Math.cos(imag), 0, 0, 0);
-    } else {
-        var scale = F.splat(p.cosh(real) + Math.cos(imag));
-        return F.div(F(p.sinh(real), Math.sin(imag), 0, 0), scale);
-    }
+    if (real !== real || imag !== imag) return scalarNaN;
+    if (imag === 0) return F(p.cosh(real), 0, 0, 0);
+    if (real === 0) return F(Math.cos(imag), 0, 0, 0);
+    var scale = F.splat(p.cosh(real) + Math.cos(imag));
+    return F.div(F(p.sinh(real), Math.sin(imag), 0, 0), scale);
 };
