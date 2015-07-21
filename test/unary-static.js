@@ -1,10 +1,12 @@
-'use strict';
+"use strict";
 
-var ComplexNumber = require('..').ComplexNumber;
-var expect = require('expect.js');
+/* eslint-disable no-unused-vars */
+var ComplexNumber = require("./..");
+var expect = require("expect.js");
+/* eslint-enable no-unused-vars */
 
-describe('Unary static methods', function () {
-  // ComplexNumber.realToComplex(1);
-  // ComplexNumber.imagToComplex(2);
-  // TODO: add other methods
+describe("Unary static methods", function () {
+    // ComplexNumber.realToComplex()
+    // ComplexNumber.imagToComplex()
+    // TODO: add other methods
 });

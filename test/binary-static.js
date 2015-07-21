@@ -1,8 +1,10 @@
-'use strict';
+"use strict";
 
-var ComplexNumber = require('..');
-var expect = require('expect.js');
+/* eslint-disable no-unused-vars */
+var ComplexNumber = require("./..");
+var expect = require("expect.js");
+/* eslint-enable no-unused-vars */
 
-describe('Binary static methods', function () {
+describe("Binary static methods", function () {
     // TODO: write tests
 });

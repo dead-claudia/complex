@@ -1,25 +1,27 @@
-'use strict';
+"use strict";
 
-var ComplexNumber = require('..').ComplexNumber;
-var expect = require('expect.js');
+/* eslint-disable no-unused-vars */
+var ComplexNumber = require("./..");
+var expect = require("expect.js");
+/* eslint-enable no-unused-vars */
 
-describe('Unary methods', function () {
+describe("Unary methods", function () {
     // var test = new ComplexNumber(0, 0);
 
     // Write tests for:
 
-    // num.recip();
-    // num.arg();
-    // num.abs();
-    // num.conj();
-    // num.negate();
-    // num.exp();
-    // num.sin();
-    // num.cos();
-    // num.tan();
-    // num.log();
-    // num.sqrt();
-    // num.sinh();
-    // num.cosh();
-    // num.tanh();
+    // Complex#recip()
+    // Complex#arg()
+    // Complex#abs()
+    // Complex#conj()
+    // Complex#negate()
+    // Complex#exp()
+    // Complex#sin()
+    // Complex#cos()
+    // Complex#tan()
+    // Complex#log()
+    // Complex#sqrt()
+    // Complex#sinh()
+    // Complex#cosh()
+    // Complex#tanh()
 });
