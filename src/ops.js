@@ -50,7 +50,7 @@ module.exports.conjComp = function (x) {
 // .add
 
 module.exports.addNum = function (x, y) {
-    return F.add(x, F(y, 0, 0, 0, 0));
+    return F.add(x, F(y, 0, 0, 0));
 };
 
 module.exports.addComp = function (x, y) {
