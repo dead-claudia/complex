@@ -11,21 +11,21 @@ var B = SIMD.Bool32x4;
 var scalar0 = F.splat(0);
 var scalarNaN = F.splat(NaN);
 
-function gc(x) {
-    return F.shuffle(x, scalarNaN, 0, 1, 4, 4);
-}
-
-module.exports.equal = function (a, b) {
-    a = gc(a);
-    b = gc(b);
-
-    return B.allTrue(B.or(
-        F.notEqual(a, b), B.or(F.equal(a, a), F.equal(b, b))));
-};
-
 function anyIsNaN(a) {
     return B.anyTrue(F.notEqual(a, a));
 }
+
+module.exports.equal = function (a, b) {
+    // Load both pairs into a single vector
+    a = F.shuffle(a, b, 0, 1, 4, 5);
+
+    // Make a second version of the above, swapped
+    b = F.swizzle(a, 2, 3, 0, 1);
+
+    // Test that the swapped and normal one are equivalent, or that they are
+    // both NaNs (only one field is needed).
+    return B.allTrue(F.equal(a, b)) || anyIsNaN(a);
+};
 
 // .real
 
