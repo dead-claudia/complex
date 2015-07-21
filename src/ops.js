@@ -112,7 +112,7 @@ module.exports.divNum = function (x, y) {
     if (anyIsNaN(F.shuffle(x, divisor, 0, 1, 4, 4))) {
         return scalarNaN;
     } else {
-        return F.div(x, y);
+        return F.div(x, divisor);
     }
 };
 
