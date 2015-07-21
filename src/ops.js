@@ -273,7 +273,7 @@ module.exports.sqrtComp = function (x) {
 
 // .sinh
 
-module.exports.sinhComp = function sinhComp(x) {
+module.exports.sinhComp = function (x) {
     var real = F.extractLane(x, 0);
     var imag = F.extractLane(x, 1);
 
@@ -287,7 +287,7 @@ module.exports.sinhComp = function sinhComp(x) {
 
 // .cosh
 
-module.exports.coshComp = function coshComp(x) {
+module.exports.coshComp = function (x) {
     var real = F.extractLane(x, 0);
     var imag = F.extractLane(x, 1);
 
@@ -301,7 +301,7 @@ module.exports.coshComp = function coshComp(x) {
 
 // .tanh
 
-module.exports.tanhComp = function tanhComp(x) {
+module.exports.tanhComp = function (x) {
     var real = F.extractLane(x, 0);
     var imag = F.extractLane(x, 1);
 
