@@ -1,6 +1,6 @@
 "use strict";
 
-var F = require("SIMD").Float64x2;
+var F = require("SIMD").Float32x4;
 var p = require("./polyfill.js");
 var Ops = require("./ops.js");
 
@@ -190,11 +190,7 @@ methods(false, ComplexNumber.prototype, {
 
 
     equals: function (num) {
-        if (num instanceof ComplexNumber) {
-            return Ops.equal(this._, num._);
-        } else {
-            return false;
-        }
+        return num instanceof ComplexNumber && Ops.equal(this._, num._);
     },
 });
 
@@ -258,7 +254,7 @@ methods(true, ComplexNumber, {
             return num1.sub(num2);
         } else if (num2 instanceof ComplexNumber) {
             return new ComplexNumberBase(
-                Ops.divComp(F(+num1, 0, 0, 0), num2._));
+                Ops.divComp(realToComplex(+num1), num2._));
         } else {
             return realToComplex(+num1 - num2);
         }
@@ -275,7 +271,7 @@ methods(true, ComplexNumber, {
     arg: function (num) {
         if (num instanceof ComplexNumber) {
             return num.arg();
-        } else if (isNaN(num) || num === 0) {
+        } else if (isNaN(num = +num) || num === 0) {
             return complexNaN;
         } else {
             return realToComplex(num > 0 ? 0 : Math.PI);
@@ -286,7 +282,7 @@ methods(true, ComplexNumber, {
         if (num instanceof ComplexNumber) {
             return num.abs();
         } else {
-            return realToComplex(Math.abs(num));
+            return realToComplex(Math.abs(+num));
         }
     },
 
@@ -294,7 +290,7 @@ methods(true, ComplexNumber, {
         if (num instanceof ComplexNumber) {
             return num.conj();
         } else {
-            return realToComplex(num);
+            return realToComplex(+num);
         }
     },
 
@@ -310,7 +306,7 @@ methods(true, ComplexNumber, {
         if (num instanceof ComplexNumber) {
             return num.exp();
         } else {
-            return realToComplex(Math.exp(num));
+            return realToComplex(Math.exp(+num));
         }
     },
 
@@ -318,7 +314,7 @@ methods(true, ComplexNumber, {
         if (num instanceof ComplexNumber) {
             return num.sin();
         } else {
-            return realToComplex(Math.sin(num));
+            return realToComplex(Math.sin(+num));
         }
     },
 
@@ -326,7 +322,7 @@ methods(true, ComplexNumber, {
         if (num instanceof ComplexNumber) {
             return num.cos();
         } else {
-            return realToComplex(Math.cos(num));
+            return realToComplex(Math.cos(+num));
         }
     },
 
@@ -334,7 +330,7 @@ methods(true, ComplexNumber, {
         if (num instanceof ComplexNumber) {
             return num.tan();
         } else {
-            return realToComplex(Math.tan(num));
+            return realToComplex(Math.tan(+num));
         }
     },
 
@@ -342,20 +338,17 @@ methods(true, ComplexNumber, {
         if (num instanceof ComplexNumber) {
             return num.log();
         } else {
-            return realToComplex(Math.log(num));
+            return realToComplex(Math.log(+num));
         }
     },
 
     sqrt: function (num) {
         if (num instanceof ComplexNumber) {
             return num.sqrt();
+        } else if ((num = +num) >= 0) {
+            return realToComplex(Math.sqrt(+num));
         } else {
-            num = +num;
-            if (num >= 0) {
-                return realToComplex(Math.sqrt(num));
-            } else {
-                return imagToComplex(Math.sqrt(-num));
-            }
+            return imagToComplex(Math.sqrt(-num));
         }
     },
 
@@ -363,7 +356,7 @@ methods(true, ComplexNumber, {
         if (num instanceof ComplexNumber) {
             return num.sinh();
         } else {
-            return realToComplex(p.sinh(num));
+            return realToComplex(p.sinh(+num));
         }
     },
 
