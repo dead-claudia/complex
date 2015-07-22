@@ -15,12 +15,12 @@ If you find a bug, please file it in the issue tracker, or, even better, open up
 
 Instances of `Complex` are immutable, and locked with `Object.freeze`.
 
-## `Complex(real: number, imaginary: number)`
-## `new Complex(real: number, imaginary: number)`
+### `Complex(real: number, imaginary: number)`
+### `new Complex(real: number, imaginary: number)`
 
 `real` is the real part, `imaginary`  is the imaginary part
 
-## Instance Methods
+### Instance Methods
 
 -   `complex.real: number`
 
@@ -114,7 +114,7 @@ Instances of `Complex` are immutable, and locked with `Object.freeze`.
 
     Check to see if these two numbers are equivalent. Note that it works logically, i.e. `Complex(1, 0).equals(1)` returns true.
 
-## Static methods
+### Static methods
 
 All of the instance methods, except for `toString` and `toJSON` have corresponding methods, and they work like this:
 
