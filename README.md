@@ -34,15 +34,6 @@ Instances of `Complex` are immutable, and locked with `Object.freeze`.
 
     Get this complex number serialized as a string. (e.g. `1 + 2i`)
 
--   `complex.valueOf(): void`
-
-    This method exists to automatically throw a TypeError, so that things like this don't work:
-
-    ```js
-    var complex = new Complex(1, 0);
-    var number = +complex;
-    ```
-
 -   `complex.toJSON(): [number, number]`
 
     Get this complex number's JSON representation.
