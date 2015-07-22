@@ -1,35 +1,35 @@
 "use strict";
 
-var ComplexNumber = require("./..");
+var Complex = require("./..");
 var expect = require("expect.js");
 
 describe("Binary instance methods", function () {
-    var compInst = new ComplexNumber(1, 2);
-    var realInst = new ComplexNumber(1, 0);
-    var imagInst = new ComplexNumber(0, 2);
-    var zeroInst = new ComplexNumber(0, 0);
+    var compInst = new Complex(1, 2);
+    var realInst = new Complex(1, 0);
+    var imagInst = new Complex(0, 2);
+    var zeroInst = new Complex(0, 0);
 
     var testNumber = 2;
-    var testReal = new ComplexNumber(1, 0);
-    var testImag = new ComplexNumber(0, 1);
-    var testComp = new ComplexNumber(3, 2);
-    var testCompZero = new ComplexNumber(0, 0);
+    var testReal = new Complex(1, 0);
+    var testImag = new Complex(0, 1);
+    var testComp = new Complex(3, 2);
+    var testCompZero = new Complex(0, 0);
 
     describe("x + y -> x.plus(y)", function () {
         it("should be correct: (1 + 2i) + 2 == (3 + 2i)", function () {
-            expect(compInst.plus(testNumber)).to.eql(new ComplexNumber(3, 2));
+            expect(compInst.plus(testNumber)).to.eql(new Complex(3, 2));
         });
 
         it("should be correct: (1 + 2i) + (1 + 0i) == (2 + 2i)", function () {
-            expect(compInst.plus(testReal)).to.eql(new ComplexNumber(2, 2));
+            expect(compInst.plus(testReal)).to.eql(new Complex(2, 2));
         });
 
         it("should be correct: (1 + 2i) + (0 + 1i) == (1 + 3i)", function () {
-            expect(compInst.plus(testImag)).to.eql(new ComplexNumber(1, 3));
+            expect(compInst.plus(testImag)).to.eql(new Complex(1, 3));
         });
 
         it("should be correct: (1 + 2i) + (3 + 2i) == (4 + 4i)", function () {
-            expect(compInst.plus(testComp)).to.eql(new ComplexNumber(4, 4));
+            expect(compInst.plus(testComp)).to.eql(new Complex(4, 4));
         });
 
         it("should be correct: (1 + 2i) + (0 + 0i) == (1 + 2i)", function () {
@@ -41,19 +41,19 @@ describe("Binary instance methods", function () {
         });
 
         it("should be correct: (1 + 0i) + 2 == (3 + 0i)", function () {
-            expect(realInst.plus(testNumber)).to.eql(new ComplexNumber(3, 0));
+            expect(realInst.plus(testNumber)).to.eql(new Complex(3, 0));
         });
 
         it("should be correct: (1 + 0i) + (1 + 0i) == (2 + 0i)", function () {
-            expect(realInst.plus(testReal)).to.eql(new ComplexNumber(2, 0));
+            expect(realInst.plus(testReal)).to.eql(new Complex(2, 0));
         });
 
         it("should be correct: (1 + 0i) + (0 + 2i) == (1 + 1i)", function () {
-            expect(realInst.plus(testImag)).to.eql(new ComplexNumber(1, 1));
+            expect(realInst.plus(testImag)).to.eql(new Complex(1, 1));
         });
 
         it("should be correct: (1 + 0i) + (3 + 2i) == (4 + 2i)", function () {
-            expect(realInst.plus(testComp)).to.eql(new ComplexNumber(4, 2));
+            expect(realInst.plus(testComp)).to.eql(new Complex(4, 2));
         });
 
         it("should be correct: (1 + 0i) + (0 + 0i) == (1 + 0i)", function () {
@@ -65,19 +65,19 @@ describe("Binary instance methods", function () {
         });
 
         it("should be correct: (0 + 2i) + 2 == (2 + 2i)", function () {
-            expect(imagInst.plus(testNumber)).to.eql(new ComplexNumber(2, 2));
+            expect(imagInst.plus(testNumber)).to.eql(new Complex(2, 2));
         });
 
         it("should be correct: (0 + 2i) + (1 + 0i) == (1 + 2i)", function () {
-            expect(imagInst.plus(testReal)).to.eql(new ComplexNumber(1, 2));
+            expect(imagInst.plus(testReal)).to.eql(new Complex(1, 2));
         });
 
         it("should be correct: (0 + 2i) + (0 + 1i) == (0 + 3i)", function () {
-            expect(imagInst.plus(testImag)).to.eql(new ComplexNumber(0, 3));
+            expect(imagInst.plus(testImag)).to.eql(new Complex(0, 3));
         });
 
         it("should be correct: (0 + 2i) + (3 + 2i) == (3 + 4i)", function () {
-            expect(imagInst.plus(testComp)).to.eql(new ComplexNumber(3, 4));
+            expect(imagInst.plus(testComp)).to.eql(new Complex(3, 4));
         });
 
         it("should be correct: (0 + 2i) + (0 + 0i) == (0 + 2i)", function () {
@@ -91,19 +91,19 @@ describe("Binary instance methods", function () {
 
     describe("x - y -> x.minus(y)", function () {
         it("should be correct: (1 + 2i) - 2 == (-1 + 2i)", function () {
-            expect(compInst.minus(testNumber)).to.eql(new ComplexNumber(-1, 2));
+            expect(compInst.minus(testNumber)).to.eql(new Complex(-1, 2));
         });
 
         it("should be correct: (1 + 2i) - (1 + 0i) == (0 + 2i)", function () {
-            expect(compInst.minus(testReal)).to.eql(new ComplexNumber(0, 2));
+            expect(compInst.minus(testReal)).to.eql(new Complex(0, 2));
         });
 
         it("should be correct: (1 + 2i) - (0 + 2i) == (1 + 1i)", function () {
-            expect(compInst.minus(testImag)).to.eql(new ComplexNumber(1, 1));
+            expect(compInst.minus(testImag)).to.eql(new Complex(1, 1));
         });
 
         it("should be correct: (1 + 2i) - (3 + 2i) == (-2 + 0i)", function () {
-            expect(compInst.minus(testComp)).to.eql(new ComplexNumber(-2, 0));
+            expect(compInst.minus(testComp)).to.eql(new Complex(-2, 0));
         });
 
         it("should be correct: (1 + 2i) - (0 + 0i) == (1 + 2i)", function () {
@@ -115,19 +115,19 @@ describe("Binary instance methods", function () {
         });
 
         it("should be correct: (1 + 0i) - 2 == (-1 + 0i)", function () {
-            expect(realInst.minus(testNumber)).to.eql(new ComplexNumber(-1, 0));
+            expect(realInst.minus(testNumber)).to.eql(new Complex(-1, 0));
         });
 
         it("should be correct: (1 + 0i) - (1 + 0i) == (0 + 0i)", function () {
-            expect(realInst.minus(testReal)).to.eql(new ComplexNumber(0, 0));
+            expect(realInst.minus(testReal)).to.eql(new Complex(0, 0));
         });
 
         it("should be correct: (1 + 0i) - (0 + 2i) == (1 - 1i)", function () {
-            expect(realInst.minus(testImag)).to.eql(new ComplexNumber(1, -1));
+            expect(realInst.minus(testImag)).to.eql(new Complex(1, -1));
         });
 
         it("should be correct: (1 + 0i) - (3 + 2i) == (-2 - 2i)", function () {
-            expect(realInst.minus(testComp)).to.eql(new ComplexNumber(-2, -2));
+            expect(realInst.minus(testComp)).to.eql(new Complex(-2, -2));
         });
 
         it("should be correct: (1 + 0i) - (0 + 0i) == (1 + 0i)", function () {
@@ -139,19 +139,19 @@ describe("Binary instance methods", function () {
         });
 
         it("should be correct: (0 + 2i) - 2 == (-2 + 2i)", function () {
-            expect(imagInst.minus(testNumber)).to.eql(new ComplexNumber(-2, 2));
+            expect(imagInst.minus(testNumber)).to.eql(new Complex(-2, 2));
         });
 
         it("should be correct: (0 + 2i) - (1 + 0i) == (-1 + 2i)", function () {
-            expect(imagInst.minus(testReal)).to.eql(new ComplexNumber(-1, 2));
+            expect(imagInst.minus(testReal)).to.eql(new Complex(-1, 2));
         });
 
         it("should be correct: (0 + 2i) - (0 + 2i) == (0 + 1i)", function () {
-            expect(imagInst.minus(testImag)).to.eql(new ComplexNumber(0, 1));
+            expect(imagInst.minus(testImag)).to.eql(new Complex(0, 1));
         });
 
         it("should be correct: (0 + 2i) - (3 + 2i) == (-3 + 0i)", function () {
-            expect(imagInst.minus(testComp)).to.eql(new ComplexNumber(-3, 0));
+            expect(imagInst.minus(testComp)).to.eql(new Complex(-3, 0));
         });
 
         it("should be correct: (0 + 2i) - (0 + 0i) == (0 + 2i)", function () {
@@ -165,19 +165,19 @@ describe("Binary instance methods", function () {
 
     describe("x * y -> x.times(y)", function () {
         it("should be correct: (1 + 2i) * 2 == (2 + 4i)", function () {
-            expect(compInst.times(testNumber)).to.eql(new ComplexNumber(2, 4));
+            expect(compInst.times(testNumber)).to.eql(new Complex(2, 4));
         });
 
         it("should be correct: (1 + 2i) * (1 + 0i) == (1 + 2i)", function () {
-            expect(compInst.times(testReal)).to.eql(new ComplexNumber(1, 2));
+            expect(compInst.times(testReal)).to.eql(new Complex(1, 2));
         });
 
         it("should be correct: (1 + 2i) * (0 + 2i) == (-2 + 1i)", function () {
-            expect(compInst.times(testImag)).to.eql(new ComplexNumber(-2, 1));
+            expect(compInst.times(testImag)).to.eql(new Complex(-2, 1));
         });
 
         it("should be correct: (1 + 2i) * (3 + 2i) ==", function () {
-            expect(compInst.times(testComp)).to.eql(new ComplexNumber(-1, 8));
+            expect(compInst.times(testComp)).to.eql(new Complex(-1, 8));
         });
 
         it("should be correct: (1 + 2i) * (0 + 0i) == (0 + 0i)", function () {
@@ -189,19 +189,19 @@ describe("Binary instance methods", function () {
         });
 
         it("should be correct: (1 + 0i) * 2 == (2 + 0i)", function () {
-            expect(realInst.times(testNumber)).to.eql(new ComplexNumber(2, 0));
+            expect(realInst.times(testNumber)).to.eql(new Complex(2, 0));
         });
 
         it("should be correct: (1 + 0i) * (1 + 0i) == (1 + 0i)", function () {
-            expect(realInst.times(testReal)).to.eql(new ComplexNumber(1, 0));
+            expect(realInst.times(testReal)).to.eql(new Complex(1, 0));
         });
 
         it("should be correct: (1 + 0i) * (0 + 2i) == (0 + 1i)", function () {
-            expect(realInst.times(testImag)).to.eql(new ComplexNumber(0, 1));
+            expect(realInst.times(testImag)).to.eql(new Complex(0, 1));
         });
 
         it("should be correct: (1 + 0i) * (3 + 2i) == (3 + 2i)", function () {
-            expect(realInst.times(testComp)).to.eql(new ComplexNumber(3, 2));
+            expect(realInst.times(testComp)).to.eql(new Complex(3, 2));
         });
 
         it("should be correct: (1 + 0i) * (0 + 0i) == (0 + 0i)", function () {
@@ -213,19 +213,19 @@ describe("Binary instance methods", function () {
         });
 
         it("should be correct: (0 + 2i) * 2 == (0 + 4i)", function () {
-            expect(imagInst.times(testNumber)).to.eql(new ComplexNumber(0, 4));
+            expect(imagInst.times(testNumber)).to.eql(new Complex(0, 4));
         });
 
         it("should be correct: (0 + 2i) * (1 + 0i) == (0 + 2i)", function () {
-            expect(imagInst.times(testReal)).to.eql(new ComplexNumber(0, 2));
+            expect(imagInst.times(testReal)).to.eql(new Complex(0, 2));
         });
 
         it("should be correct: (0 + 2i) * (0 + 2i) == (-2 + 0i)", function () {
-            expect(imagInst.times(testImag)).to.eql(new ComplexNumber(-2, 0));
+            expect(imagInst.times(testImag)).to.eql(new Complex(-2, 0));
         });
 
         it("should be correct: (0 + 2i) * (3 + 2i) == (-4 + 6i)", function () {
-            expect(imagInst.times(testComp)).to.eql(new ComplexNumber(-4, 6));
+            expect(imagInst.times(testComp)).to.eql(new Complex(-4, 6));
         });
 
         it("should be correct: (0 + 2i) * (0 + 0i) == (0 + 0i)", function () {
@@ -239,19 +239,19 @@ describe("Binary instance methods", function () {
 
     describe("x / y -> x.divide(y)", function () {
         it("should be correct: (1 + 2i) / 2 == (0.5 + 1i)", function () {
-            expect(compInst.divide(testNumber)).to.eql(new ComplexNumber(0.5, 1));
+            expect(compInst.divide(testNumber)).to.eql(new Complex(0.5, 1));
         });
 
         it("should be correct: (1 + 2i) / (1 + 0i) == (1 + 2i)", function () {
-            expect(compInst.divide(testReal)).to.eql(new ComplexNumber(1, 2));
+            expect(compInst.divide(testReal)).to.eql(new Complex(1, 2));
         });
 
         it("should be correct: (1 + 2i) / (0 + 2i) == (1 - 0.5i)", function () {
-            expect(compInst.divide(testImag)).to.eql(new ComplexNumber(1, -0.5));
+            expect(compInst.divide(testImag)).to.eql(new Complex(1, -0.5));
         });
 
         it("should be correct: (1 + 2i) / (3 + 2i) == (1.4 + .8i)", function () {
-            expect(compInst.divide(testComp)).to.eql(new ComplexNumber(1.4, 0.8));
+            expect(compInst.divide(testComp)).to.eql(new Complex(1.4, 0.8));
         });
 
         it("should be correct: (1 + 2i) / (0 + 0i) == (NaN + NaN*i)", function () {
@@ -262,23 +262,23 @@ describe("Binary instance methods", function () {
         });
 
         it("should be correct: (1 + 2i) / 0 == (NaN + NaN*i)", function () {
-            expect(compInst.divide(0)).to.eql(new ComplexNumber(NaN, NaN));
+            expect(compInst.divide(0)).to.eql(new Complex(NaN, NaN));
         });
 
         it("should be correct: (1 + 0i) / 2 == (0.5 + 0i)", function () {
-            expect(realInst.divide(testNumber)).to.eql(new ComplexNumber(0.5, 0));
+            expect(realInst.divide(testNumber)).to.eql(new Complex(0.5, 0));
         });
 
         it("should be correct: (1 + 0i) / (1 + 0i) == (1 + 0i)", function () {
-            expect(realInst.divide(testReal)).to.eql(new ComplexNumber(1, 0));
+            expect(realInst.divide(testReal)).to.eql(new Complex(1, 0));
         });
 
         it("should be correct: (1 + 0i) / (0 + 2i) == (0 - 0.5i)", function () {
-            expect(realInst.divide(testImag)).to.eql(new ComplexNumber(0, -0.5));
+            expect(realInst.divide(testImag)).to.eql(new Complex(0, -0.5));
         });
 
         it("should be correct: (1 + 0i) / (3 + 2i) == (.6 - .4i)", function () {
-            expect(realInst.divide(testComp)).to.eql(new ComplexNumber(0.6, -0.4));
+            expect(realInst.divide(testComp)).to.eql(new Complex(0.6, -0.4));
         });
 
         it("should be correct: (1 + 0i) / (0 + 0i) == (NaN + NaN)", function () {
@@ -296,19 +296,19 @@ describe("Binary instance methods", function () {
         });
 
         it("should be correct: (0 + 2i) / 2 == (0 + 1i)", function () {
-            expect(imagInst.divide(testNumber)).to.eql(new ComplexNumber(0, 1));
+            expect(imagInst.divide(testNumber)).to.eql(new Complex(0, 1));
         });
 
         it("should be correct: (0 + 2i) / (1 + 0i) == (0 + 2i)", function () {
-            expect(imagInst.divide(testReal)).to.eql(new ComplexNumber(0, 2));
+            expect(imagInst.divide(testReal)).to.eql(new Complex(0, 2));
         });
 
         it("should be correct: (0 + 2i) / (0 + 2i) == (2 + 0i)", function () {
-            expect(imagInst.divide(testImag)).to.eql(new ComplexNumber(2, 0));
+            expect(imagInst.divide(testImag)).to.eql(new Complex(2, 0));
         });
 
         it("should be correct: (0 + 2i) / (3 + 2i) == (.8 - .6i)", function () {
-            expect(imagInst.divide(testComp)).to.eql(new ComplexNumber(0.8, -0.6));
+            expect(imagInst.divide(testComp)).to.eql(new Complex(0.8, -0.6));
         });
 
         it("should be correct: (0 + 2i) / (0 + 0i) == (NaN + NaN*i)", function () {
@@ -329,7 +329,7 @@ describe("Binary instance methods", function () {
     describe("0 + 0i (special case)", function () {
         describe("x + y -> x.plus(y)", function () {
             it("should be correct: (0 + 0i) + 2 == (2 + 0i)", function () {
-                expect(zeroInst.plus(testNumber)).to.eql(new ComplexNumber(testNumber, 0));
+                expect(zeroInst.plus(testNumber)).to.eql(new Complex(testNumber, 0));
             });
 
             it("should be correct: (0 + 0i) + (1 + 0i) == (1 + 0i)", function () {
@@ -354,7 +354,7 @@ describe("Binary instance methods", function () {
         });
         describe("x - y -> x.minus(y)", function () {
             it("should be correct: (0 + 0i) - 2 == (-2 + 0i)", function () {
-                expect(zeroInst.minus(testNumber)).to.eql(new ComplexNumber(-testNumber, 0));
+                expect(zeroInst.minus(testNumber)).to.eql(new Complex(-testNumber, 0));
             });
 
             it("should be correct: (0 + 0i) - (1 + 0i) == (- 1 - 0i)", function () {

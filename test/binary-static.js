@@ -1,7 +1,7 @@
 "use strict";
 
 /* eslint-disable no-unused-vars */
-var ComplexNumber = require("./..");
+var Complex = require("./..");
 var expect = require("expect.js");
 /* eslint-enable no-unused-vars */
 

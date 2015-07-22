@@ -1,227 +1,172 @@
 Complex.js
 ==========
 
-Complex number implementation in Javascript
+A basic, single-precision floating point complex number implementation in JavaScript, powered by SIMD.js.
 
-The source is in complex.js, and the latest stable minified version is in
-complex.min.js when available. The minified library is built using the Closure
-Compiler. This project is licensed with the GNU GPL v3 or later.
+```js
+var Complex = require("complex");
+```
 
-Please file any bugs you find in the issue tracker, and if you have a patch
-for a bug, go ahead and send me a pull request.
+If you find a bug, please file it in the issue tracker, or, even better, open up a PR. Make sure to run `gulp test` first.
 
-**NOTE:** The file complex.es6.js is written in ECMAScript 6, and is not meant
-for standard use currently.
+*Note that the test suite is currently incomplete, but I'm most certainly open to PRs on that, too.*
 
------
+---
 
-## Documentation ##
+Instances of `Complex` are immutable, and locked with `Object.freeze`.
 
-**NOTE:** This is out-of-date. The updated documentation will be added to the
-*doc* directory.
+## `Complex(real: number, imaginary: number)`
+## `new Complex(real: number, imaginary: number)`
 
-### Key: ###
+`real` is the real part, `imaginary`  is the imaginary part
 
- - *argument* - an argument
- - (SomeClass) *argument* - an argument of type SomeClass
- - (ClassOne|ClassTwo) - either of type ClassOne or ClassTwo
- - **method**() - a method
+## Instance Methods
 
-### Constructor: ###
+-   `complex.real: number`
 
-- **ComplexNumber**(*real*, *imaginary*)
-   
-  - (Number) *real* - real part
-  - (Number) *imaginary* - imaginary part
-  - Note: Instances of this class are immutable. None of the properties can be changed or added to.
+    The real part of this complex number.
 
-### Properties: ###
+-   `complex.imag: number`
 
-- **ComplexNumber.real** - real part
-  
-  ***Returns:*** `Number`
+    The imaginary part of this complex number.
 
-- **ComplexNumber.imag** - imaginary part
-  
-  ***Returns:*** `Number`
+-   `complex.toString(): string`
 
-- **ComplexNumber.prototype.length**
-  
-  ***Returns:*** `Number`
-  The length of this class is always 2.
+    Get this complex number serialized as a string. (e.g. `1 + 2i`)
 
-### Methods: ###
+-   `complex.valueOf(): void`
 
-- **.toString**() - stringifies it to the form `'a + bi'`
-  
-  ***Arguments:***
-  
-  - *this* - a ComplexNumber instance
-  
-  ***Returns:*** `String`
+    This method exists to automatically throw a TypeError, so that things like this don't work:
 
-- **.plus**(*num*) - adds a number to a ComplexNumber
-  
-  ***Arguments:***
-  
-  - *this* - a ComplexNumber instance
-  - (ComplexNumber|Number) *num* - the number to add
-  
-  ***Returns:*** `String`
+    ```js
+    var complex = new Complex(1, 0);
+    var number = +complex;
+    ```
 
-- **.minus**(*num*) - subtracts a number from a ComplexNumber
-  
-  ***Arguments:***
-  
-  - *this* - a ComplexNumber instance
-  - (ComplexNumber|Number) *num* - the number to subtract
-  
-  ***Returns:*** `ComplexNumber`
+-   `complex.toJSON(): [number, number]`
 
-- **.times**(*num*) - multiplies a number with a ComplexNumber
-  
-  ***Arguments:***
-  
-  - *this* - a ComplexNumber instance
-  - (ComplexNumber|Number) *num* - the number to multiply
-  
-  ***Returns:*** `ComplexNumber`
+    Get this complex number's JSON representation.
 
-- **.divide**(*num*) - divides a number from a ComplexNumber
-  
-  ***Arguments:***
-  
-  - *this* - a ComplexNumber instance
-  - (ComplexNumber|Number) *num* - the number to divide
-  
-  ***Returns:*** `ComplexNumber`
+-   `complex.add(num: number | Complex): Complex`
 
-- **.recip**() - returns the reciprocal of a ComplexNumber
-  
-  ***Arguments:***
-  
-  - *this* - a ComplexNumber instance
-  
-  ***Returns:*** `ComplexNumber`
+    Add `num` to this complex number. Analogous to `a + b`.
 
-- **.arg**() - returns the angle/argument of a ComplexNumber
-  
-  ***Arguments:***
-  
-  - *this* - a ComplexNumber instance
-  
-  ***Returns:*** `Number`
+-   `complex.sub(num: number | Complex): Complex`
 
-- **.abs**() - returns the absolute value/modulus of a ComplexNumber
-  
-  ***Arguments:***
-  
-  - *this* - a ComplexNumber instance
-  
-  ***Returns:*** `Number`
+    Subtract `num` from this complex number. Analogous to `a - b`.
 
-- **.conj**() - returns the conjugate of a ComplexNumber
-  
-  ***Arguments:***
-  
-  - *this* - a ComplexNumber instance
-  
-  ***Returns:*** `ComplexNumber`
+-   `complex.mul(num: number | Complex): Complex`
 
-- **.negate**() - returns the negative of a ComplexNumber
-  
-  ***Arguments:***
-  
-  - *this* - a ComplexNumber instance
-  
-  ***Returns:*** `ComplexNumber`
+    Multiply `num` with this complex number. Analogous to `a * b`.
 
-- **.exp**() - returns *e* raised to the power of a ComplexNumber
-  
-  ***Arguments:***
-  
-  - *this* - a ComplexNumber instance
-  
-  ***Returns:*** `ComplexNumber`
+-   `complex.sub(num: number | Complex): Complex`
 
-- **.sin**() - returns the sine of a ComplexNumber
-  
-  ***Arguments:***
-  
-  - *this* - a ComplexNumber instance
-  
-  ***Returns:*** `ComplexNumber`
+    Divide this complex number by `num`. Analogous to `a / b`.
 
-- **.cos**() - returns the cosine of a ComplexNumber
-  
-  ***Arguments:***
-  
-  - *this* - a ComplexNumber instance
-  
-  ***Returns:*** `ComplexNumber`
+-   `complex.recip(): Complex`
 
-- **.tan**() - returns the tangent of a ComplexNumber
-  
-  ***Arguments:***
-  
-  - *this* - a ComplexNumber instance
-  
-  ***Returns:*** `ComplexNumber`
+    Get the reciprocal of this complex number. Analogous to `1 / a`.
 
-- **.log**() - returns the logarithm of a ComplexNumber
-  
-  ***Arguments:***
-  
-  - *this* - a ComplexNumber instance
-  
-  ***Returns:*** `ComplexNumber`
+-   `complex.arg(): number`
 
-- **.sqrt**() - returns the square root of a ComplexNumber
-  
-  ***Arguments:***
-  
-  - *this* - a ComplexNumber instance
-  
-  ***Returns:*** `ComplexNumber`
+    Get the argument of this complex number, i.e. `Math.atan2(this.real, this.imag)`
 
-- **.sinh**() - returns the hyperbolic sine of a ComplexNumber
-  
-  ***Arguments:***
-  
-  - *this* - a ComplexNumber instance
-  
-  ***Returns:*** `ComplexNumber`
+-   `complex.abs(): number`
 
-- **.cosh**() - returns the hyperbolic cosine of a ComplexNumber
-  
-  ***Arguments:***
-  
-  - *this* - a ComplexNumber instance
-  
-  ***Returns:*** `ComplexNumber`
+    Get the absolute value (modulus) of this value, i.e. `Math.hypot(this.real, this.imag)`. Similar to `Math.abs(a)`.
 
-- **.tanh**() - returns the hyperbolic tangent of a ComplexNumber
-  
-  ***Arguments:***
-  
-  - *this* - a ComplexNumber instance
-  
-  ***Returns:*** `ComplexNumber`
+-   `complex.conj(): Complex`
 
-- **ComplexNumber.realToComplex**(*real*) - static method to convert a real
-  number to a ComplexNumber instance
-  
-  ***Arguments:***
-  
-  - *real* - the real number to convert
-  
-  ***Returns:*** `ComplexNumber`
+    Get the conjugate of this complex number, i.e. `a + bi -> a - bi`
 
-- **ComplexNumber.imagToComplex**(*imaginary*) - static method to convert an
-  imaginary number to a ComplexNumber instance
-  
-  ***Arguments:***
-  
-  - *real* - the coefficient of the imaginary number to convert
-  
-  ***Returns:*** `ComplexNumber`
+-   `complex.neg(): Complex`
+
+    Multiply this number by -1. Analogous to `-a`.
+
+-   `complex.exp(): Complex`
+
+    Get *e*<sup>*x*</sup>, where *x* is this complex number. Analogous to `Math.exp(a)`.
+
+-   `complex.sin(): Complex`
+
+    Get the sine of this complex number. Analogous to `Math.sin(a)`.
+
+-   `complex.cos(): Complex`
+
+    Get the cosine of this complex number. Analogous to `Math.cos(a)`.
+
+-   `complex.tan(): Complex`
+
+    Get the tangent of this complex number. Analogous to `Math.tan(a)`.
+
+-   `complex.log(): Complex`
+
+    Get the natural logarithm (base *e*) of this complex number. Analogous to `Math.log(a)`.
+
+-   `complex.sqrt(): Complex`
+
+    Get the square root of this complex number. Analogous to `Math.sqrt(a)`.
+
+-   `complex.sinh(): Complex`
+
+    Get the hyperbolic sine of this complex number. Analogous to `Math.sinh(a)` in ES2015.
+
+-   `complex.cosh(): Complex`
+
+    Get the hyperbolic cosine of this complex number. Analogous to `Math.cosh(a)` in ES2015.
+
+-   `complex.tanh(): Complex`
+
+    Get the hyperbolic tangent of this complex number. Analogous to `Math.tanh(a)` in ES2015.
+
+-   `complex.equals(num: number | Complex): boolean`
+
+    Check to see if these two numbers are equivalent. Note that it works logically, i.e. `Complex(1, 0).equals(1)` returns true.
+
+## Static methods
+
+All of the instance methods, except for `toString` and `toJSON` have corresponding methods, and they work like this:
+
+```js
+// Unary method
+Complex.recip(num: number | Complex): Complex;
+Complex.abs(num: number | Complex): number;
+
+// Binary method
+Complex.add(num1: number | Complex, num2: number | Complex): Complex;
+Complex.equals(num1: number | Complex, num2: number | Complex): boolean;
+```
+
+They work on real numbers as well as complex numbers, and they work logically:
+
+```js
+Complex.add(1, 2) -> Complex(3, 0)
+Complex.add(Complex(1, 0), 2) -> Complex(3, 0)
+Complex.add(1, Complex(2, 0)) -> Complex(3, 0)
+```
+
+You can also use them as `map`, `reduce`, etc. functions without binding them (and that's why they exist):
+
+```js
+// nums is a list of possibly complex numbers
+var sum = nums.reduce(Complex.add);
+```
+
+Other functions include:
+
+-   `Complex.from(num: number | Complex): Complex`<br>
+    `Complex.fromReal(num: number | Complex): Complex`
+
+    Convert this (possibly complex) number into a complex number instance. Both forms are equivalent.
+
+-   `Complex.fromImag(num: number | Complex): Complex`
+
+    Make this the imaginary part of a (possibly) complex number. It effectively multiplies `num` with the imaginary unit, and that is the behavior when passing a complex number as an argument.
+
+-   `Complex.real(num: number | Complex): number`
+
+    Get the real part of a (possibly) complex number.
+
+-   `Complex.imag(num: number | Complex): number`
+
+    Get the imaginary part of a (possibly) complex number. For real numbers, this always returns 0.

@@ -1,30 +1,34 @@
 {
   "name": "complex",
-  "version": "0.0.0",
-  "description": "Complex number implementation, using SIMD.js when available.",
+  "version": "0.0.1",
+  "description": "Complex number implementation based on SIMD.js.",
   "main": "src/complex.js",
-  "files": ["src"],
-  "dependencies": {},
+  "files": [
+    "src"
+  ],
+  "dependencies": {
+    "simd": "^2.0.0"
+  },
   "devDependencies": {
     "expect.js": "^0.3.1",
     "gulp": "^3.9.0",
-    "gulp-mocha": "^2.1.1",
-    "simd": "^1.0.0"
+    "gulp-eslint": "^0.15.0",
+    "gulp-mocha": "^2.1.1"
   },
   "scripts": {
-    "lint": "eslint .",
-    "pretest": "npm run lint",
-    "test": "mocha test"
+    "lint": "gulp lint",
+    "test": "gulp test"
   },
   "repository": "impinball/complex",
   "keywords": [
     "complex",
-    "math"
+    "math",
+    "simd"
   ],
   "author": "Isiah Meadows <isiahmeadows@gmail.com>",
   "license": "BSD-2-Clause",
   "bugs": {
     "url": "https://github.com/impinball/complex/issues"
   },
-  "homepage": "https://github.com/impinball/complex#readme"
+  "homepage": "https://github.com/impinball/complex"
 }
