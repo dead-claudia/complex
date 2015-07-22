@@ -104,10 +104,6 @@ methods(false, Complex.prototype, {
         return [Ops.getReal(this._), Ops.getImag(this._)];
     },
 
-    valueOf: function () {
-        throw new TypeError("Cannot be converted to a number");
-    },
-
     add: function (num) {
         if (num instanceof Complex) {
             return new ComplexBase(Ops.addComp(this._, num._));
