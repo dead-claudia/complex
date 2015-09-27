@@ -1,15 +1,15 @@
 Complex.js
 ==========
 
-A basic, single-precision floating point complex number implementation in JavaScript, powered by SIMD.js.
+A basic, single-precision floating point complex number implementation in JavaScript, powered by SIMD.js. Note that this is mostly an experiment, and shouldn't be used in any serious application.
 
 ```js
 var Complex = require("complex");
 ```
 
-If you find a bug, please file it in the issue tracker, or, even better, open up a PR. Make sure to run `gulp test` first.
+If you find a bug, please file it in the issue tracker, or, even better, open up a PR. Make sure to run `gulp test` first. There's probably quite a few.
 
-*Note that the test suite is currently incomplete, but I'm most certainly open to PRs on that, too.*
+*Note that test coverage is not the greatest, but I'm most certainly open to PRs on that, too, even if they present bugs.*
 
 ---
 
