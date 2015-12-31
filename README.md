@@ -1,6 +1,8 @@
 Complex.js
 ==========
 
+[![Build Status](https://travis-ci.org/isiahmeadows/complex.svg)](https://travis-ci.org/isiahmeadows/complex)
+
 A basic, single-precision floating point complex number implementation in JavaScript, powered by SIMD.js. Note that this is mostly an experiment, and shouldn't be used in any serious application.
 
 ```js
